@@ -8,9 +8,9 @@
 export function openingLayers(name='theater') {
   const brand=String(name).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const windows = [
-    ['showreel', '01', 'SHOWREEL', 'INTERFACE RECONSTRUCTION'],
-    ['dialogue', '02', 'DIALOGUE', 'INTERFACE EXPLORATION'],
-    ['sea', '03', 'ARCHIVE', 'PERSONAL INDEX'],
+    ['showreel', '01', 'MIDNIGHT', 'AI AGENT WORKBENCH'],
+    ['dialogue', '02', 'SUBTEXT / AIRP', 'CONVERSATION + MEMORY'],
+    ['sea', '03', 'PUBLIC WORKS', 'CODE + INTERACTION'],
     ['observatory', '04', 'ORBIT', 'ENVIRONMENT STUDY'],
     ['letterform', '05', 'LETTERFORM', 'TYPE STUDY'],
     ['geometry', '06', 'STRUCTURE', 'GEOMETRY STUDY'],

@@ -140,6 +140,8 @@
 @media (prefers-reduced-motion:no-preference) {
   body:not(.motion-off) .hero-artwork>img.home-image-held {visibility:hidden!important}
 }
+/* Explicit opt-in keeps the same temporary image owner even when the system reduces motion. */
+:root[data-motion-preference="on"] body:not(.motion-off) .hero-artwork>img.home-image-held {visibility:hidden!important}
 @media (max-width:680px) {
   .cinema-stage[data-to=home] .home-transfer {--home-initial-x:4%;--home-initial-y:21%;--home-initial-width:92%;--home-initial-height:58%}
   .home-transfer .home-picture {
@@ -160,7 +162,7 @@ body.motion-off .home-transfer {display:none!important}
 body.motion-off .home-transfer,
 body.motion-off .home-transfer * {animation:none!important;transition:none!important}
 @media (prefers-reduced-motion:reduce) {
-  .home-transfer {display:none!important}
-  .home-transfer,
-  .home-transfer * {animation:none!important;transition:none!important}
+  :root:not([data-motion-preference="on"]) .home-transfer {display:none!important}
+  :root:not([data-motion-preference="on"]) .home-transfer,
+  :root:not([data-motion-preference="on"]) .home-transfer * {animation:none!important;transition:none!important}
 }

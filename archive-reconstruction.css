@@ -109,9 +109,9 @@ body.page-hidden .archive-art > :not(.asset-status),
 body.page-hidden .archive-art::before,
 body.page-hidden .archive-art::after {animation-play-state:paused!important}
 @media (prefers-reduced-motion:reduce) {
-  .archive-art > :not(.asset-status),
-  .archive-art::before,
-  .archive-art::after {animation:none!important;transition:none!important}
+  :root:not([data-motion-preference="on"]) .archive-art > :not(.asset-status),
+  :root:not([data-motion-preference="on"]) .archive-art::before,
+  :root:not([data-motion-preference="on"]) .archive-art::after {animation:none!important;transition:none!important}
 }
 @media (forced-colors:active), print {
   .archive-art > :not(.asset-status),

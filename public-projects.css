@@ -1,0 +1,21 @@
+/* Public GitHub records: semantic content, with the existing cinematic owners. */
+.project-art-caption{position:absolute;bottom:16px;left:20px;right:20px;z-index:8;color:#dce4e4;text-shadow:0 1px 4px #071218;font:10px/1.4 var(--mono);pointer-events:none;letter-spacing:1px}
+.project-visual .project-art-caption{bottom:42px}.detail-art .project-art-caption{bottom:17px}
+.repo-slug{display:block;font:10px/1.6 var(--mono);letter-spacing:.3px;color:#64757a;margin-top:8px;overflow-wrap:anywhere}
+.project-meta>a{font:11px var(--sans);color:#8e3143;text-decoration:none;border-bottom:1px solid #8e314360;padding:7px 0}
+.project-meta>a:hover,.project-meta>a:focus-visible{color:#361321;border-color:currentColor}
+.repo-index-link{display:inline-flex;align-items:center;gap:24px;margin-top:22px;font-size:12px;color:#b63e50;text-decoration:none;border-bottom:1px solid #b63e5070;padding:8px 0}
+.repo-index-link span{transition:transform .25s}.repo-index-link:hover span{transform:translate(4px,-4px)}
+.project-info h2 button{overflow-wrap:anywhere}.detail-body h2{overflow-wrap:anywhere}.detail-tags{flex-wrap:wrap}
+.upstream-contributions{padding-top:80px;border-top:1px solid #79838244;margin-top:80px}
+.upstream-heading h2{font:500 clamp(25px,3vw,43px)/1.2 var(--serif);margin:12px 0 18px;color:var(--ink)}
+.upstream-heading p{font-size:13px;line-height:1.8;color:#5d6c70}.contribution-list{margin-top:34px}
+.contribution-row{display:grid;grid-template-columns:40px minmax(0,1fr) 72px;gap:20px;align-items:start;padding:22px 12px;border-top:1px solid #79838255;color:#22363d;text-decoration:none;transition:background .25s,transform .25s}
+.contribution-row:hover{background:#bccac24a;transform:translateX(5px)}.contribution-row:focus-visible{outline:2px solid #ac364a;outline-offset:-3px;background:#bccac24a}
+.contribution-index{font:12px var(--mono);color:#a63749;padding-top:4px}.contribution-row b{display:block;font:600 15px/1.5 var(--sans);overflow-wrap:anywhere}.contribution-row b small{font:11px var(--mono);color:#64747a}
+.contribution-row>span>span{display:block;margin-top:7px;font:12px/1.7 var(--mono);color:#53666d;overflow-wrap:anywhere}.contribution-row em{font:10px/1.8 var(--mono);font-style:normal;color:#466252;text-align:right;padding-top:3px}
+.global-controls{gap:16px}.motion-system{font-size:10px;color:#99b6be}.motion-system[aria-pressed=true]{color:#cbd3cd}.motion-system[aria-pressed=false]{text-decoration:underline;text-underline-offset:4px}
+@media(max-width:680px){.global-controls{gap:9px;align-items:center}.global-controls .icon-button{font-size:9px;gap:4px}.global-controls .replay-icon{display:none}.motion-system{max-width:42px;white-space:normal;line-height:1.3;text-align:center}.topbar{right:12px}.project-art-caption{font-size:9px;left:12px;right:12px}.upstream-contributions{margin-top:45px;padding-top:40px}.contribution-row{grid-template-columns:24px minmax(0,1fr);gap:10px;padding:20px 5px}.contribution-row em{grid-column:2;text-align:left}.contribution-row b{font-size:13px}.contribution-row>span>span{font-size:11px}.repo-index-link{margin-top:14px}}
+.project-art-caption{right:auto;max-width:calc(100% - 40px);padding:4px 7px;background:#14242be8;color:#eef3ec;text-shadow:none;letter-spacing:.5px}
+.global-controls .icon-button{min-height:44px}
+@media(max-width:680px){.global-controls .icon-button{font-size:11px}.global-controls{gap:8px}.motion-system{max-width:42px}}

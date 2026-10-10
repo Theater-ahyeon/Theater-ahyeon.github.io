@@ -186,7 +186,7 @@ body.motion-off .observation-transfer {display:none!important}
 body.motion-off .observation-transfer,
 body.motion-off .observation-transfer * {animation:none!important;transition:none!important}
 @media (prefers-reduced-motion:reduce) {
-  .observation-transfer {display:none!important}
-  .observation-transfer,
-  .observation-transfer * {animation:none!important;transition:none!important}
+  :root:not([data-motion-preference="on"]) .observation-transfer {display:none!important}
+  :root:not([data-motion-preference="on"]) .observation-transfer,
+  :root:not([data-motion-preference="on"]) .observation-transfer * {animation:none!important;transition:none!important}
 }

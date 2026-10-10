@@ -34,8 +34,8 @@ function imageURL(value) {
 }
 
 function shapeFor(project) {
-  if (project.id === 'dialogue') return 'dialogue';
-  if (project.id === 'archive') return 'archive';
+  if ((project.artKind || project.id) === 'dialogue') return 'dialogue';
+  if ((project.artKind || project.id) === 'archive') return 'archive';
   return imageURL(project.image) ? 'showreel' : 'graphic';
 }
 
@@ -51,9 +51,9 @@ function planes(input, surface) {
   const no = escapeText(project.no || '—');
   const title = escapeText(project.title || 'PROJECT');
   const category = escapeText(project.category || 'PERSONAL EXPERIMENT');
-  const source = imageURL(project.image) || (kind === 'archive' ? './assets/observatory.webp' : '');
+  const source = imageURL(project.image) || (kind === 'archive' ? imageURL(project.artImage) || './assets/observatory.webp' : '');
   const imageStyle = source ? ` style="--dossier-image:url(&quot;${escapeText(source)}&quot;)"` : '';
-  const classification = kind === 'dialogue' ? 'CONTEXT / INTERFACE' : kind === 'archive' ? 'SPACE / COMPOSITION' : kind === 'showreel' ? 'IMAGE / RECONSTRUCTION' : 'FORM / EXPERIMENT';
+  const classification = kind === 'dialogue' ? 'CONTEXT / INTERFACE' : kind === 'archive' ? 'SPACE / COMPOSITION' : kind === 'showreel' ? 'PROJECT / DIAGRAM' : 'FORM / EXPERIMENT';
   return `<span class="dossier-planes dossier-${surface} dossier-${kind}" aria-hidden="true"${imageStyle}>
     <span class="dossier-performance">
       <span class="dossier-field"></span>

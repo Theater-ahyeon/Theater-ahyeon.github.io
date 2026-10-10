@@ -21,7 +21,8 @@ dialog{border:1px solid #aababc44;background:#dfe2dc;color:#1d2930;padding:0;wid
 @media(max-width:375px){.wordmark span{display:none}.chapter-link{padding:10px 8px;gap:6px}.nav-copy b{font-size:13px}.nav-copy small{font-size:5px}.hero-title{font-size:47px}.hero-text{padding-left:20px;padding-right:20px}.hero-caption p{font-size:11px}.hero-bottom{margin-top:180px}.study-keywords{gap:15px}}
 /* No content depends on motion. This switch is also applied before the intro. */
 body.motion-off *,body.motion-off *:before,body.motion-off *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}body.motion-off .reveal,body.motion-off .title-line>span,body.motion-off .hero-landscape{opacity:1;transform:none;clip-path:none;translate:0;scale:1}body.motion-off .motion-glyph i{height:2px}body.motion-off .ambient-canvas{display:none}body.motion-off .hero-orbits{opacity:.65}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.intro{display:none}.ambient-canvas{display:none}}
+/* System reduction remains the default; only the site's explicit on choice bypasses it. */
+@media(prefers-reduced-motion:reduce){:root:not([data-motion-preference="on"]){scroll-behavior:auto}:root:not([data-motion-preference="on"]),:root:not([data-motion-preference="on"]) *,:root:not([data-motion-preference="on"]):before,:root:not([data-motion-preference="on"]) *:before,:root:not([data-motion-preference="on"]):after,:root:not([data-motion-preference="on"]) *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}:root:not([data-motion-preference="on"]) .intro{display:none}:root:not([data-motion-preference="on"]) .ambient-canvas{display:none}}
 /* The navigation acts as a small chapter instrument: the frame, dial and cutout move together. */
 .nav-mark{position:relative;display:grid;place-items:center;width:25px;height:25px}.nav-mark b{font-size:17px;font-weight:400}.nav-mark i{position:absolute;inset:0;border:1px solid currentColor;opacity:.25;transform:rotate(45deg);transition:transform 1s var(--ease)}.nav-mark i:nth-child(2){inset:5px;border-radius:50%;transform:rotate(0)}.chapter-link:hover .nav-mark i:first-child{transform:rotate(135deg)}.chapter-link.active .nav-number{animation:nav-stamp .65s var(--ease) both}.portrait-rings{transition:transform 1.5s var(--ease)}.portrait-rings i{position:absolute;inset:-7%;border:1px solid #c9d3d31b;border-radius:50%}.portrait-rings i:nth-child(2){inset:18%;border-radius:0;transform:rotate(45deg)}.portrait-rings>span{position:absolute;right:3%;top:17%;color:#bf3d4d;font-size:22px}body[data-scene=works] .portrait-rings{transform:rotate(90deg) scale(.85)}body[data-scene=studies] .portrait-rings{transform:rotate(180deg) scale(1.1)}body[data-scene=about] .portrait-rings{transform:rotate(270deg)}body[data-scene=about] .side-portrait img{filter:sepia(.35);transform:translateY(5px)}body[data-scene=studies] .side-portrait img{transform:translateX(5px) scale(1.05)}
 .works-heading:after{content:'SELECTED';position:absolute;top:23px;right:-2%;font:600 clamp(60px,8vw,140px)/1 var(--sans);letter-spacing:-6px;color:transparent;-webkit-text-stroke:1px #5b686715;pointer-events:none}.works-heading>.section-description{z-index:1}.page-title{position:relative;z-index:1}.scene-works .project-card{animation-name:project-assemble}.scene-about .about-field{animation-name:profile-stamp}.scene-studies .study-tabs button{animation:nav-stamp .8s var(--ease) both}.scene-studies .study-tabs button:nth-child(2){animation-delay:.15s}.scene-studies .study-tabs button:nth-child(3){animation-delay:.3s}.archive-grid{display:none}
@@ -106,7 +107,7 @@ body.motion-off .detail-art-keyword{display:none}
 .scene-about.profile-enter .about-name>span{animation:signature-star-receive 1.5s linear both}
 @keyframes signature-star-receive{0%,85%{opacity:0}94%,100%{opacity:1}}
 body.motion-off .about-reveal-ritual{display:none}
-@media(prefers-reduced-motion:reduce){.about-reveal-ritual{display:none}}
+@media(prefers-reduced-motion:reduce){:root:not([data-motion-preference="on"]) .about-reveal-ritual{display:none}}
 @media(max-width:680px){.about-focal-mark{width:53px;height:78px}.about-reveal-ritual>span{top:calc(50% + 65px);font-size:9px}}
 /* Motion controls remain reachable while reading long pages. */
 .topbar{position:sticky;top:0}@media(max-width:680px){.topbar{position:fixed;top:0;right:17px;left:auto}}
@@ -188,7 +189,7 @@ dialog{overflow-x:hidden}
 .about-connectors path{fill:none;stroke:#d0b678;stroke-width:.7;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1;opacity:0;animation:profile-connection 1.35s calc(1.3s + var(--line,0)*120ms) cubic-bezier(.4,0,.2,1) both}
 @keyframes profile-connection{0%{stroke-dashoffset:1;opacity:0}18%{opacity:.7}78%{stroke-dashoffset:0;opacity:.45}100%{stroke-dashoffset:0;opacity:.12}}
 body.motion-off .about-connectors{display:none}
-@media(prefers-reduced-motion:reduce){.about-connectors{display:none}}
+@media(prefers-reduced-motion:reduce){:root:not([data-motion-preference="on"]) .about-connectors{display:none}}
 @media(max-width:980px){.about-connectors path{stroke-width:.55}}
 
 /* Finite profile score is route-owned; resuming motion does not restart it. */

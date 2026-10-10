@@ -147,9 +147,9 @@ body.page-hidden .dialogue-art *,
 body.page-hidden .dialogue-art::before,
 body.page-hidden .dialogue-art::after {animation-play-state:paused!important}
 @media (prefers-reduced-motion:reduce) {
-  .dialogue-art *,
-  .dialogue-art::before,
-  .dialogue-art::after {animation:none!important;transition:none!important}
+  :root:not([data-motion-preference="on"]) .dialogue-art *,
+  :root:not([data-motion-preference="on"]) .dialogue-art::before,
+  :root:not([data-motion-preference="on"]) .dialogue-art::after {animation:none!important;transition:none!important}
 }
 @media (forced-colors:active), print {
   .dialogue-art *,

@@ -148,7 +148,7 @@
   .cinema-stage .cinema-index {bottom:3%;font-size:7px}
 }
 body.motion-off .cinema-stage {display:none!important}
-@media(prefers-reduced-motion:reduce){.cinema-stage {display:none!important}}
+@media(prefers-reduced-motion:reduce){:root:not([data-motion-preference="on"]) .cinema-stage {display:none!important}}
 
 /* The archive turns into the real page. The main DOM is the moving object. */
 .cinema-dividers{display:none}
@@ -180,7 +180,7 @@ body.motion-off .cinema-stage {display:none!important}
 .cinema-stage[data-to=home] .cinema-number{font-size:clamp(110px,21vw,300px);top:-3%;left:3%;z-index:3}
 @keyframes home-picture-aperture{0%{opacity:0;transform:scale(.5);clip-path:polygon(0 42%,100% 42%,100% 42%,100% 58%,100% 58%,0 58%,0 58%,0 42%)}22%{opacity:1;transform:scale(1);clip-path:polygon(0 35%,100% 35%,100% 35%,100% 65%,100% 65%,0 65%,0 65%,0 35%)}42%{opacity:1;transform:scale(.95);clip-path:polygon(32% 0,68% 0,81% 15%,81% 85%,68% 100%,32% 100%,19% 85%,19% 15%)}62%{opacity:1;transform:scale(1.08);clip-path:polygon(0 0,100% 0,100% 0,100% 100%,100% 100%,0 100%,0 100%,0 0)}89%,100%{opacity:0;transform:scale(1.13);clip-path:polygon(0 0,100% 0,100% 0,100% 100%,100% 100%,0 100%,0 100%,0 0)}}
 body.motion-off #main.route-arriving>.scene{animation:none!important;transform:none!important;box-shadow:none}
-@media(prefers-reduced-motion:reduce){#main.route-arriving>.scene{animation:none!important;transform:none!important;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){:root:not([data-motion-preference="on"]) #main.route-arriving>.scene{animation:none!important;transform:none!important;box-shadow:none}}
 @media(max-width:680px){
  .cinema-stage[data-to=works] #transition-label{font-size:clamp(85px,25vw,170px);max-width:100%;margin-left:2%}
  .cinema-stage[data-to=works] .cinema-title-plane{top:0;height:100%}

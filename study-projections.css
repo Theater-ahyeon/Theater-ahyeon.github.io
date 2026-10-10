@@ -228,6 +228,6 @@ body:not([data-app-ready="true"]) .study-projection {display:none!important}
 body.motion-off .study-projection *,
 body:not([data-app-ready="true"]) .study-projection * {animation:none!important;transition:none!important}
 @media (prefers-reduced-motion:reduce) {
-  .study-projection {display:none!important}
-  .study-projection * {animation:none!important;transition:none!important}
+  :root:not([data-motion-preference="on"]) .study-projection {display:none!important}
+  :root:not([data-motion-preference="on"]) .study-projection * {animation:none!important;transition:none!important}
 }

@@ -1,22 +1,386 @@
 export const profile = {
- name:'theater',
- tagline:'视觉与交互实验',
- siteType:'个人博客与作品集',
- github:'https://github.com/Theater-ahyeon',
- metaSummary:'个人博客首页，记录视觉、动效与交互的持续实验。',
- intro:['画面的秩序，运动的节奏。','在这里，记录视觉与交互的探索。'],
- summary:['这个主页收录界面设计、动态视觉与前端重构的探索。','作品与观测，在同一份档案中持续展开。']
+ "name": "theater",
+ "tagline": "视觉与交互实验",
+ "siteType": "个人博客与作品集",
+ "github": "https://github.com/Theater-ahyeon",
+ "metaSummary": "个人博客首页，记录 AI 应用、开发工具、交互模拟与视觉实验。",
+ "intro": [
+  "用代码连接构想，用交互展开体验。",
+  "这里记录我的公开作品与视觉探索。"
+ ],
+ "summary": [
+  "从 AI 工作台、记忆应用到交互模拟，",
+  "这里收录我的公开 GitHub 项目，以及参与上游项目的贡献。"
+ ]
 };
 export const chapters = {
  home: {label:'序章', en:'INTRODUCTION', title:`${profile.name} · ${profile.tagline}`},
- works: {label:'作品', en:'SELECTED WORKS', title:`作品 · ${profile.name}`},
+ works: {label:'作品', en:'PUBLIC PROJECTS', title:`公开作品 · ${profile.name}`},
  studies: {label:'观测', en:'VISUAL STUDIES', title:`观测 · ${profile.name}`},
  about: {label:'关于', en:'PROFILE', title:`关于 · ${profile.name}`}
 };
 export const projects = [
- {id:'showreel', reference:{label:'Kakavlinna · 原始视频',url:'https://www.bilibili.com/video/BV1Pxa269EJC/'}, no:'01', category:'FRONT-END RECONSTRUCTION', title:'SHOWREEL', subtitle:'交互重构', status:'私有项目 · 过程展示', description:'将动态影像中的版式、镜头与视觉层次，拆解为可以操作的网页组件。', tags:['视觉拆解','组件重构','交互动效'], image:'./assets/showreel-study.svg', imageAlt:'原创几何封面：分镜窗口、轨迹与模块化版式，非项目截图', detail:'以原始影像为参考，围绕镜头构图、界面层级与动态节奏展开的网页重构。保留画面的表现力，同时把导航、内容与交互重新组织为真实的前端组件。项目当前为私有；这里的封面是原创几何示意，并非原作画面或项目截图。', facts:[['形式','动态网页'],['关注','画面与组件的对应'],['入口','个人私有作品']]},
- {id:'dialogue', no:'02', category:'INTERFACE DESIGN STUDY', title:'DIALOGUE', subtitle:'AI 对话桌面界面', status:'设计探索', description:'围绕对话、上下文与桌面工作流展开的界面设计探索。', tags:['信息层级','对话界面','桌面体验'], detail:'以 AI 对话桌面界面为主题的设计探索。关注长对话中的阅读层级，以及聊天内容与工作上下文如何在同一视野中共存。', facts:[['形式','界面设计探索'],['关注','对话与工作上下文'],['状态','未提供公开体验链接']]},
- {id:'archive', no:'03', category:'VISUAL & MOTION SYSTEM', title:'ARCHIVE', subtitle:'个人视觉档案', status:'当前作品', description:'从图形、光影与节奏出发，组织一套连续的个人主页体验。', tags:['视觉系统','场景转场','响应式设计'], detail:'当前的个人主页：以序章、作品、观测与关于四个章节组织内容，将构图、导航和动画作为一个连续的视觉系统。公开版本使用原创非人物环境图与代码绘制的几何封面，保留构图研究来源链接；不依赖 WebGL。', facts:[['形式','个人博客与作品集'],['关注','统一视觉与分章叙事'],['动效','支持暂停与减少动态效果']]}
+ {
+  "id": "midnight-contract",
+  "no": "01",
+  "title": "MIDNIGHT",
+  "subtitle": "零点契约",
+  "category": "AI AGENT WORKBENCH",
+  "status": "公开仓库",
+  "description": "自托管多模型 AI 智能体工作台，将工作区、会话、长期记忆、工具、消息渠道与自动化任务集中管理。",
+  "detail": "自托管多模型 AI 智能体工作台，将工作区、会话、长期记忆、工具、消息渠道与自动化任务集中管理。 配置、运行方法与实现细节见仓库 README。",
+  "tags": [
+   "TypeScript",
+   "React",
+   "Hono"
+  ],
+  "stack": [
+   "TypeScript",
+   "React",
+   "Hono",
+   "SQLite",
+   "Pi Runtime"
+  ],
+  "url": "https://github.com/Theater-ahyeon/midnight-contract",
+  "urlLabel": "查看源码",
+  "reference": {
+   "label": "midnight-contract / README",
+   "url": "https://github.com/Theater-ahyeon/midnight-contract/blob/main/README.md",
+   "prefix": "项目说明"
+  },
+  "artKind": "image",
+  "repoName": "midnight-contract",
+  "fork": false,
+  "isTemplate": false,
+  "verifiedAt": "2026-10-10T16:34:00Z",
+  "facts": [
+   [
+    "类型",
+    "AI 工作台"
+   ],
+   [
+    "主要技术",
+    "TypeScript / React / Hono"
+   ],
+   [
+    "仓库",
+    "非 Fork · 非模板"
+   ]
+  ],
+  "image": "./assets/project-midnight.svg",
+  "imageAlt": "零点契约的原创功能结构示意，非应用截图"
+ },
+ {
+  "id": "subtext",
+  "no": "02",
+  "title": "SUBTEXT",
+  "subtitle": "知微 · Subtext",
+  "category": "LOCAL-FIRST CONVERSATION",
+  "status": "公开仓库",
+  "description": "本地优先的重要对话演练工具：整理证据与理解卡，模拟沟通场景，再用现实反馈修正理解。",
+  "detail": "本地优先的重要对话演练工具：整理证据与理解卡，模拟沟通场景，再用现实反馈修正理解。 配置、运行方法与实现细节见仓库 README。",
+  "tags": [
+   "JavaScript",
+   "Electron",
+   "Node.js"
+  ],
+  "stack": [
+   "JavaScript",
+   "Electron",
+   "Node.js",
+   "本地存储"
+  ],
+  "url": "https://github.com/Theater-ahyeon/subtext",
+  "urlLabel": "查看源码",
+  "reference": {
+   "label": "subtext / README",
+   "url": "https://github.com/Theater-ahyeon/subtext/blob/main/README.md",
+   "prefix": "项目说明"
+  },
+  "artKind": "dialogue",
+  "repoName": "subtext",
+  "fork": false,
+  "isTemplate": false,
+  "verifiedAt": "2026-10-10T16:34:00Z",
+  "facts": [
+   [
+    "类型",
+    "AI 应用"
+   ],
+   [
+    "主要技术",
+    "JavaScript / Electron / Node.js"
+   ],
+   [
+    "仓库",
+    "非 Fork · 非模板"
+   ]
+  ],
+  "visualLabels": [
+   "EVIDENCE / 01",
+   "REHEARSAL"
+  ]
+ },
+ {
+  "id": "airp",
+  "no": "03",
+  "title": "AIRP",
+  "subtitle": "本地叙事与长期记忆",
+  "category": "MEMORY & NARRATIVE",
+  "status": "公开仓库",
+  "description": "本地叙事应用与长期记忆引擎，支持角色卡与世界书导入、事件日志、分支回退及流式生成恢复。",
+  "detail": "本地叙事应用与长期记忆引擎，支持角色卡与世界书导入、事件日志、分支回退及流式生成恢复。 配置、运行方法与实现细节见仓库 README。",
+  "tags": [
+   "TypeScript",
+   "React",
+   "Hono"
+  ],
+  "stack": [
+   "TypeScript",
+   "React",
+   "Hono",
+   "TanStack Virtual"
+  ],
+  "url": "https://github.com/Theater-ahyeon/airp",
+  "urlLabel": "查看源码",
+  "reference": {
+   "label": "airp / README",
+   "url": "https://github.com/Theater-ahyeon/airp/blob/main/README.md",
+   "prefix": "项目说明"
+  },
+  "artKind": "dialogue",
+  "repoName": "airp",
+  "fork": false,
+  "isTemplate": false,
+  "verifiedAt": "2026-10-10T16:34:00Z",
+  "facts": [
+   [
+    "类型",
+    "记忆与叙事"
+   ],
+   [
+    "主要技术",
+    "TypeScript / React / Hono"
+   ],
+   [
+    "仓库",
+    "非 Fork · 非模板"
+   ]
+  ],
+  "visualLabels": [
+   "MEMORY / 01",
+   "NARRATIVE"
+  ]
+ },
+ {
+  "id": "skin-craft",
+  "no": "04",
+  "title": "SKIN CRAFT",
+  "subtitle": "Agent 前端定制技能",
+  "category": "REFERENCE TO COMPONENTS",
+  "status": "公开仓库",
+  "description": "面向 Agent 的前端定制技能，把源码理解、设计方向、定制素材、真实组件实现与浏览器验证串成可复用流程。",
+  "detail": "面向 Agent 的前端定制技能，把源码理解、设计方向、定制素材、真实组件实现与浏览器验证串成可复用流程。 配置、运行方法与实现细节见仓库 README。",
+  "tags": [
+   "Python",
+   "Agent Skill",
+   "Pillow"
+  ],
+  "stack": [
+   "Python",
+   "Agent Skill",
+   "Pillow"
+  ],
+  "url": "https://github.com/Theater-ahyeon/skin-craft",
+  "urlLabel": "查看源码",
+  "reference": {
+   "label": "skin-craft / README",
+   "url": "https://github.com/Theater-ahyeon/skin-craft/blob/main/README.md",
+   "prefix": "项目说明"
+  },
+  "artKind": "image",
+  "repoName": "skin-craft",
+  "fork": false,
+  "isTemplate": false,
+  "verifiedAt": "2026-10-10T16:34:00Z",
+  "facts": [
+   [
+    "类型",
+    "开发工具"
+   ],
+   [
+    "主要技术",
+    "Python / Agent Skill / Pillow"
+   ],
+   [
+    "仓库",
+    "非 Fork · 非模板"
+   ]
+  ],
+  "image": "./assets/project-skin.svg",
+  "imageAlt": "Skin Craft的原创功能结构示意，非应用截图"
+ },
+ {
+  "id": "darkside-simulation",
+  "no": "05",
+  "title": "DARKSIDE",
+  "subtitle": "黑暗森林 · 文明模拟",
+  "category": "CIVILIZATION SIMULATION",
+  "status": "公开仓库",
+  "description": "基于《三体》黑暗森林设定的实时宇宙文明模拟，以不同文明策略、科技发展与博弈机制驱动 Canvas 星图。",
+  "detail": "基于《三体》黑暗森林设定的实时宇宙文明模拟，以不同文明策略、科技发展与博弈机制驱动 Canvas 星图。 配置、运行方法与实现细节见仓库 README。",
+  "tags": [
+   "Python",
+   "FastAPI",
+   "WebSocket"
+  ],
+  "stack": [
+   "Python",
+   "FastAPI",
+   "WebSocket",
+   "Canvas"
+  ],
+  "url": "https://github.com/Theater-ahyeon/darkside-simulation",
+  "urlLabel": "查看源码",
+  "reference": {
+   "label": "darkside-simulation / README",
+   "url": "https://github.com/Theater-ahyeon/darkside-simulation/blob/master/README.md",
+   "prefix": "项目说明"
+  },
+  "artKind": "archive",
+  "repoName": "darkside-simulation",
+  "fork": false,
+  "isTemplate": false,
+  "verifiedAt": "2026-10-10T16:34:00Z",
+  "facts": [
+   [
+    "类型",
+    "交互模拟"
+   ],
+   [
+    "主要技术",
+    "Python / FastAPI / WebSocket"
+   ],
+   [
+    "仓库",
+    "非 Fork · 非模板"
+   ]
+  ],
+  "artImage": "./assets/project-darkside.svg",
+  "visualTitle": "DARKSIDE"
+ },
+ {
+  "id": "PersonalizationTripSystem",
+  "no": "06",
+  "title": "TRIP SYSTEM",
+  "subtitle": "个性化旅游系统",
+  "category": "ALGORITHMS & WEB MAPS",
+  "status": "公开仓库 · 课程设计",
+  "description": "数据结构课程设计：结合 C++ 核心与 Web 地图界面，实现兴趣推荐、路线规划、设施检索、日记与美食推荐。",
+  "detail": "数据结构课程设计：结合 C++ 核心与 Web 地图界面，实现兴趣推荐、路线规划、设施检索、日记与美食推荐。 配置、运行方法与实现细节见仓库 README。",
+  "tags": [
+   "C++17",
+   "JavaScript",
+   "Leaflet"
+  ],
+  "stack": [
+   "C++17",
+   "JavaScript",
+   "Leaflet",
+   "Dijkstra",
+   "A*"
+  ],
+  "url": "https://github.com/Theater-ahyeon/PersonalizationTripSystem",
+  "urlLabel": "查看源码",
+  "reference": {
+   "label": "PersonalizationTripSystem / README",
+   "url": "https://github.com/Theater-ahyeon/PersonalizationTripSystem/blob/main/README.md",
+   "prefix": "项目说明"
+  },
+  "artKind": "image",
+  "repoName": "PersonalizationTripSystem",
+  "fork": false,
+  "isTemplate": false,
+  "verifiedAt": "2026-10-10T16:34:00Z",
+  "facts": [
+   [
+    "类型",
+    "算法与全栈"
+   ],
+   [
+    "主要技术",
+    "C++17 / JavaScript / Leaflet"
+   ],
+   [
+    "仓库",
+    "非 Fork · 非模板"
+   ]
+  ],
+  "image": "./assets/project-trip.svg",
+  "imageAlt": "个性化旅游系统的原创功能结构示意，非应用截图"
+ }
+];
+export const contributions = [
+ {
+  "repository": "bytedance/deer-flow",
+  "number": 5898,
+  "url": "https://github.com/bytedance/deer-flow/pull/5898",
+  "title": "fix(agents): scope delegation ledger IDs to parent runs",
+  "author": "Theater-ahyeon",
+  "merged": true,
+  "merged_at": "2026-09-27T01:50:31Z",
+  "state": "closed"
+ },
+ {
+  "repository": "bytedance/deer-flow",
+  "number": 5897,
+  "url": "https://github.com/bytedance/deer-flow/pull/5897",
+  "title": "fix(subagents): terminalize batches after exhausted leases expire",
+  "author": "Theater-ahyeon",
+  "merged": true,
+  "merged_at": "2026-09-28T07:29:18Z",
+  "state": "closed"
+ },
+ {
+  "repository": "TencentCloud/Octop",
+  "number": 918,
+  "url": "https://github.com/TencentCloud/Octop/pull/918",
+  "title": "fix(update): checkpoint SQLite WAL before desktop process restart",
+  "author": "Theater-ahyeon",
+  "merged": true,
+  "merged_at": "2026-09-23T07:40:44Z",
+  "state": "closed"
+ },
+ {
+  "repository": "crewAIInc/crewAI",
+  "number": 7435,
+  "url": "https://github.com/crewAIInc/crewAI/pull/7435",
+  "title": "fix(cli): don't crash the run TUI when streamed output contains a literal [...]",
+  "author": "Theater-ahyeon",
+  "merged": true,
+  "merged_at": "2026-09-14T15:11:34Z",
+  "state": "closed"
+ },
+ {
+  "repository": "QwenLM/qwen-code",
+  "number": 11129,
+  "url": "https://github.com/QwenLM/qwen-code/pull/11129",
+  "title": "docs(developers): document CI and release repository variables",
+  "author": "Theater-ahyeon",
+  "merged": true,
+  "merged_at": "2026-09-28T10:36:46Z",
+  "state": "closed"
+ },
+ {
+  "repository": "agno-agi/agno",
+  "number": 10160,
+  "url": "https://github.com/agno-agi/agno/pull/10160",
+  "title": "[fix] replace dead links in cookbook knowledge sources and docs references",
+  "author": "Theater-ahyeon",
+  "merged": true,
+  "merged_at": "2026-09-20T21:32:49Z",
+  "state": "closed"
+ }
 ];
 export const studies = [
  {id:'tide', no:'01', anchor:'Voices / alchemaniac', title:'潮汐与留白', en:'TIDAL COMPOSITION', description:'冷色的大面积空间里，用一道红色建立视线的起点。曲线与碎片形成流向，让静止画面保留运动的余势。', credit:'Gilang Andrian · Voices', url:'https://www.gilangandrian.com/Arknights-EP-Illustration-Voices', className:'tide', keywords:['三角构图','冷暖焦点','弧形流向']},

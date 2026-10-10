@@ -429,10 +429,12 @@ body.motion-off .navigation-cinema *::after { animation: none !important; transi
 body.motion-off .navigation-cinema .portrait-aperture > i { display: none; }
 body.motion-off .navigation-cinema .nav-record-plane { scale: 1; }
 @media (prefers-reduced-motion: reduce) {
-  .navigation-cinema *, .navigation-cinema *::before, .navigation-cinema *::after {
+  :root:not([data-motion-preference="on"]) .navigation-cinema *,
+  :root:not([data-motion-preference="on"]) .navigation-cinema *::before,
+  :root:not([data-motion-preference="on"]) .navigation-cinema *::after {
     animation: none !important;
     transition: none !important;
   }
-  .navigation-cinema .portrait-aperture > i { display: none; }
-  .navigation-cinema .nav-record-plane { scale: 1; }
+  :root:not([data-motion-preference="on"]) .navigation-cinema .portrait-aperture > i { display: none; }
+  :root:not([data-motion-preference="on"]) .navigation-cinema .nav-record-plane { scale: 1; }
 }

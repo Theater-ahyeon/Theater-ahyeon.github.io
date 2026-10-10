@@ -1,4 +1,4 @@
-import {watchImage} from './assets.js?v=21.4-public1';
+import {watchImage} from './assets.js?v=21.5-public2';
 
 /** Non-blocking image presentation. Layout and source links remain available. */
 export function monitorImage(image, {onReady, onError} = {}) {

@@ -1,0 +1,8 @@
+/* A late enhancement stays optional while the static page is being read. */
+.bootstrap-ready{position:fixed;z-index:55;right:max(20px,env(safe-area-inset-right));bottom:calc(48px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:16px;max-width:calc(100vw - 32px);padding:10px 12px 10px 16px;border:1px solid #8a9da5;background:#101a21;color:#e4e5dd;box-shadow:0 8px 28px #0006;font:12px/1.5 var(--sans,sans-serif)}
+.bootstrap-ready[hidden]{display:none}
+.bootstrap-ready>span{letter-spacing:1px}
+.bootstrap-ready button{min-height:44px;padding:8px 14px;border:1px solid #d08a91;background:#263139;color:#ffe3e6;font:inherit;cursor:pointer}
+.bootstrap-ready button:hover{background:#39434a}
+.bootstrap-ready button:focus-visible{outline:3px solid #f6c3c9;outline-offset:3px}
+@media(max-width:600px){.bootstrap-ready{right:16px;bottom:calc(42px + env(safe-area-inset-bottom));gap:10px;padding:8px 10px 8px 12px;font-size:11px}}

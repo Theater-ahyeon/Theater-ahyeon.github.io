@@ -235,10 +235,10 @@ body.motion-off .dossier-performance {display:none!important}
 body.motion-off .dossier-register {transform:none}
 body.motion-off .dossier-edge-type {translate:0 0}
 @media (prefers-reduced-motion:reduce) {
-  .dossier-planes * {animation:none!important;transition:none!important}
-  .dossier-performance {display:none!important}
-  .dossier-register {transform:none!important}
-  .dossier-edge-type {translate:0 0!important}
+  :root:not([data-motion-preference="on"]) .dossier-planes * {animation:none!important;transition:none!important}
+  :root:not([data-motion-preference="on"]) .dossier-performance {display:none!important}
+  :root:not([data-motion-preference="on"]) .dossier-register {transform:none!important}
+  :root:not([data-motion-preference="on"]) .dossier-edge-type {translate:0 0!important}
 }
 @media (forced-colors:active) {.dossier-planes {display:none}}
 @media print {.dossier-planes {display:none}}
