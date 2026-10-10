@@ -1,0 +1,160 @@
+/*
+ * Dialogue: flat record → isolated paper pair → the actual two-window layout.
+ * The CONTEXT and DIALOGUE cards are the artwork throughout this score. Their
+ * existing transform/hover, geometry, text and colour remain owned by styles.css.
+ * The reveal/dialog owner supplies .dossier-enter and --dossier-delay. No new
+ * runtime, copied interface, image, or independently repeating animation.
+ */
+.dossier-dialogue .dossier-performance {display:none}
+.dossier-dialogue .dossier-performance,
+.dossier-dialogue .dossier-performance * {animation:none!important}
+
+.dialogue-art {--dossier-duration:1400ms;isolation:isolate}
+.detail-art > .dialogue-art {--dossier-duration:1500ms}
+
+/* Temporary architecture sits behind the native artwork, never above its text. */
+.dialogue-art::before,
+.dialogue-art::after {position:absolute;z-index:-1;opacity:0;pointer-events:none}
+.dialogue-art::before {
+  content:'DIALOGUE';
+  left:-.075em;
+  top:.06em;
+  color:#dedfd9;
+  font:900 clamp(76px,14vw,180px)/.8 var(--sans,sans-serif);
+  letter-spacing:-.085em;
+  white-space:nowrap;
+}
+.dialogue-art::after {
+  content:'';
+  inset:13% 7% 14%;
+  border:solid #dedfd957;
+  border-width:0 0 1px 1px;
+  background:
+    linear-gradient(#dedfd957,#dedfd957) 0 33% / 100% 1px no-repeat,
+    linear-gradient(#dedfd957,#dedfd957) 68% 0 / 1px 100% no-repeat,
+    repeating-linear-gradient(0deg,#dedfd999 0 1px,transparent 1px 10%) 0 0 / 7px 100% no-repeat;
+  transform-origin:0 100%;
+}
+.dialogue-art .mini-lines > i,
+.dialogue-art .mini-message > i {transform-origin:0 50%}
+
+/* All beats share one clock; headers remain on their real cards at every beat. */
+.dossier-enter .dialogue-art > .mini-window:not(.secondary) {
+  animation:dialogue-context-build var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .dialogue-art > .mini-window.secondary {
+  animation:dialogue-response-build var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .dialogue-art .mini-lines > i {
+  animation:dialogue-line-first var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .dialogue-art .mini-lines > i:nth-child(2) {animation-name:dialogue-line-second}
+.dossier-enter .dialogue-art .mini-lines > i:nth-child(3) {animation-name:dialogue-line-third}
+.dossier-enter .dialogue-art .mini-window.secondary .mini-lines > i {animation-name:dialogue-line-second}
+.dossier-enter .dialogue-art .mini-window.secondary .mini-lines > i:nth-child(2) {animation-name:dialogue-line-third}
+.dossier-enter .dialogue-art .mini-message {
+  animation:dialogue-message-build var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .dialogue-art .mini-message > :is(span,i) {
+  animation:dialogue-message-ink var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .dialogue-art > .dialogue-orbit {
+  animation:dialogue-orbit-receive var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .dialogue-art > strong {
+  animation:dialogue-arrow-receive var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .dialogue-art::before {
+  animation:dialogue-type-architecture var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .dialogue-art::after {
+  animation:dialogue-record-rulers var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+
+/* Counter-rotation flattens the original card first. Individual transforms then
+ * return to identity, leaving the original -6° / +7° and hover transforms intact.
+ * The negative clip envelope releases the real shadows before clipping is removed.
+ */
+@keyframes dialogue-context-build {
+  0%,16% {translate:-8% 28%;rotate:6deg;scale:1.08 .94;clip-path:inset(0 0 75% 0);animation-timing-function:cubic-bezier(.2,.75,.18,1)}
+  32%,43% {translate:8% -4%;rotate:-14deg;scale:.72;clip-path:inset(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  70%,88% {translate:0 0;rotate:0deg;scale:1;clip-path:inset(-30%)}
+  100% {translate:0 0;rotate:0deg;scale:1;clip-path:none}
+}
+@keyframes dialogue-response-build {
+  0%,20% {translate:-25% 12%;rotate:-7deg;scale:.9;clip-path:inset(0 0 69% 0);animation-timing-function:cubic-bezier(.2,.75,.18,1)}
+  38%,46% {translate:-45% -22%;rotate:13deg;scale:.65;clip-path:inset(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  74%,88% {translate:0 0;rotate:0deg;scale:1;clip-path:inset(-50%)}
+  100% {translate:0 0;rotate:0deg;scale:1;clip-path:none}
+}
+@keyframes dialogue-line-first {
+  0%,50% {opacity:0;scale:0 1;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  73%,100% {opacity:1;scale:1}
+}
+@keyframes dialogue-line-second {
+  0%,57% {opacity:0;scale:0 1;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  80%,100% {opacity:1;scale:1}
+}
+@keyframes dialogue-line-third {
+  0%,64% {opacity:0;scale:0 1;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  87%,100% {opacity:1;scale:1}
+}
+@keyframes dialogue-message-build {
+  0%,65% {clip-path:inset(0 100% 0 0);translate:-8% 0;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  87% {clip-path:inset(0);translate:0 0}
+  100% {clip-path:none;translate:0 0}
+}
+@keyframes dialogue-message-ink {
+  0%,76% {opacity:0;scale:.2 1;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  94%,100% {opacity:1;scale:1}
+}
+@keyframes dialogue-orbit-receive {
+  0%,56% {opacity:0;scale:.8;rotate:-12deg;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  94%,100% {opacity:1;scale:1;rotate:0deg}
+}
+@keyframes dialogue-arrow-receive {
+  0%,70% {opacity:0;translate:-25% 18%;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  95%,100% {opacity:1;translate:0 0}
+}
+@keyframes dialogue-type-architecture {
+  0% {opacity:0;translate:0 65%;scale:.8;clip-path:inset(45% 0 0);animation-timing-function:cubic-bezier(.2,.75,.18,1)}
+  18% {opacity:.17;translate:0 10%;scale:1;clip-path:inset(0)}
+  36%,44% {opacity:.22;translate:-3% 0;scale:1.18;clip-path:inset(0);animation-timing-function:cubic-bezier(.55,0,.8,.4)}
+  68%,100% {opacity:0;translate:-10% -38%;scale:1.25;clip-path:inset(0)}
+}
+@keyframes dialogue-record-rulers {
+  0% {opacity:0;scale:.25 1;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  16%,30% {opacity:.8;scale:1}
+  52% {opacity:.4;scale:1}
+  72%,100% {opacity:0;scale:1}
+}
+
+@media (max-width:680px) {
+  .dialogue-art::before {font-size:clamp(76px,25vw,152px)}
+}
+
+/* Cancellation restores the underlying artwork immediately, including a close
+ * during a delayed first frame. Hidden tabs retain the existing pause/resume
+ * owner, so returning cannot restart a cancelled CSS animation from frame zero.
+ */
+body.motion-off .dialogue-art *,
+body.motion-off .dialogue-art::before,
+body.motion-off .dialogue-art::after,
+.dialog-closing .dialogue-art *,
+.dialog-closing .dialogue-art::before,
+.dialog-closing .dialogue-art::after {animation:none!important;transition:none!important}
+body.page-hidden .dialogue-art *,
+body.page-hidden .dialogue-art::before,
+body.page-hidden .dialogue-art::after {animation-play-state:paused!important}
+@media (prefers-reduced-motion:reduce) {
+  .dialogue-art *,
+  .dialogue-art::before,
+  .dialogue-art::after {animation:none!important;transition:none!important}
+}
+@media (forced-colors:active), print {
+  .dialogue-art *,
+  .dialogue-art::before,
+  .dialogue-art::after {animation:none!important;transition:none!important}
+  .dialogue-art::before,
+  .dialogue-art::after {display:none}
+}

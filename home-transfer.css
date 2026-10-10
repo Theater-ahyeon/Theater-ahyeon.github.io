@@ -1,0 +1,166 @@
+/* Home: one original picture, a slot -> octagon -> full-image aperture.
+ * Load after styles.css and scene-cinema.css. Opaque commit remains external.
+ * 420 ms preflight + 650 ms measured dock; hold, never fade, until 1120 ms clear.
+ */
+.cinema-stage .home-transfer {display:none}
+.cinema-stage[data-to=home] :is(.cinema-title-plane, .cinema-grid, .cinema-dividers, .cinema-wedge, .cinema-number, .cinema-axis, .cinema-fiducials, .cinema-index) {
+  display:none;
+  animation:none;
+}
+.cinema-stage[data-to=home] .home-transfer {
+  --home-paper:#d5e1dc;
+  --home-red:#b95765;
+  --home-initial-x:8%;
+  --home-initial-y:16%;
+  --home-initial-width:84%;
+  --home-initial-height:68%;
+  --home-dock-duration:650ms;
+  --home-ease:cubic-bezier(.4,0,.18,1);
+  position:absolute;
+  inset:0;
+  z-index:7;
+  display:block;
+  overflow:hidden;
+  contain:paint;
+  isolation:isolate;
+  pointer-events:none;
+  user-select:none;
+  opacity:0;
+  visibility:hidden;
+}
+.home-transfer *,
+.home-transfer *::before,
+.home-transfer *::after {box-sizing:border-box;pointer-events:none;user-select:none}
+.home-transfer div,
+.home-transfer i {display:block}
+/* Reset the old veil's broad i rules; these marks are not its wiping bars. */
+.cinema-stage .home-transfer i {
+  flex:none;
+  height:auto;
+  background:none;
+  transform:none;
+  animation:none;
+  font-style:normal;
+}
+.home-transfer .home-datum {
+  position:absolute;
+  left:8%;
+  top:8%;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  color:var(--home-paper);
+  font:11px/1 var(--mono);
+  letter-spacing:2px;
+}
+.home-transfer .home-datum b {font-weight:400}
+.cinema-stage .home-transfer .home-datum i {width:25px;height:1px;background:var(--home-red)}
+.home-transfer .home-frame {
+  position:absolute;
+  left:var(--home-initial-x);
+  top:var(--home-initial-y);
+  width:var(--home-initial-width);
+  height:var(--home-initial-height);
+  overflow:visible;
+}
+.home-transfer .home-exposure,
+.home-transfer .home-picture,
+.home-transfer .home-register {position:absolute;inset:0}
+.home-transfer .home-exposure {z-index:0;clip-path:polygon(0 0,100% 0,100% 0,100% 100%,100% 100%,0 100%,0 100%,0 0)}
+.home-transfer .home-picture {
+  background-image:url('./assets/observatory.webp');
+  background-size:contain;
+  background-position:var(--home-image-position,50% 50%);
+  background-repeat:no-repeat;
+  mask-image:var(--home-mask-image,linear-gradient(90deg,transparent 0%,#000 30%,#000 94%,transparent 100%),linear-gradient(0deg,transparent 0%,#000 13%,#000 81%,transparent 100%));
+  mask-composite:var(--home-mask-composite,intersect);
+  mask-size:var(--home-mask-size,auto);
+  mask-position:var(--home-mask-position,0% 0%);
+  mask-repeat:var(--home-mask-repeat,repeat);
+  filter:var(--home-image-filter,drop-shadow(0 20px 30px #04101899));
+  opacity:1;
+}
+/* A quiet, unmoving perimeter contains the crop changes. Its single corner
+ * accents then travel with the picture; no gallery, duplicate image or title. */
+.home-transfer .home-register {z-index:1;box-shadow:inset 0 0 0 1px #d5e1dc22}
+.cinema-stage .home-transfer .home-register i {
+  position:absolute;
+  width:17px;
+  height:17px;
+  border:solid var(--home-paper);
+  border-width:1px 0 0 1px;
+}
+.home-transfer .home-register i:nth-child(1) {left:0;top:0}
+.home-transfer .home-register i:nth-child(2) {right:0;top:0;rotate:90deg}
+.home-transfer .home-register i:nth-child(3) {right:0;bottom:0;rotate:180deg;border-color:var(--home-red)}
+.home-transfer .home-register i:nth-child(4) {left:0;bottom:0;rotate:270deg}
+
+.cinema-stage[data-to=home].active .home-transfer {animation:home-aperture-presence var(--cinema-duration,1120ms) linear both}
+.cinema-stage[data-to=home].active .home-datum {animation:home-aperture-datum var(--cinema-duration,1120ms) linear both}
+.cinema-stage[data-to=home].active .home-exposure {animation:home-aperture-open 420ms var(--home-ease) both}
+.cinema-stage[data-to=home].active.home-docking .home-frame {animation:home-aperture-dock var(--home-dock-duration) var(--home-ease) both}
+.cinema-stage[data-to=home].active.home-docking .home-exposure {animation:home-aperture-release var(--home-dock-duration) var(--home-ease) both}
+.cinema-stage[data-to=home].active.home-docking .home-register {animation:home-aperture-register var(--home-dock-duration) linear both}
+.cinema-stage[data-to=home].home-retired .home-transfer {display:none}
+
+@keyframes home-aperture-presence {
+  0% {opacity:0;visibility:visible}
+  9%,100% {opacity:1;visibility:visible}
+}
+@keyframes home-aperture-datum {
+  0%,10% {opacity:0}
+  20%,66% {opacity:1}
+  83%,100% {opacity:0}
+}
+@keyframes home-aperture-open {
+  0%,18% {clip-path:polygon(0 47%,100% 47%,100% 47%,100% 53%,100% 53%,0 53%,0 53%,0 47%)}
+  50% {clip-path:polygon(0 34%,100% 34%,100% 34%,100% 66%,100% 66%,0 66%,0 66%,0 34%)}
+  100% {clip-path:polygon(27% 0,73% 0,86% 15%,86% 85%,73% 100%,27% 100%,14% 85%,14% 15%)}
+}
+@keyframes home-aperture-dock {
+  0% {left:var(--home-initial-x);top:var(--home-initial-y);width:var(--home-initial-width);height:var(--home-initial-height)}
+  76%,100% {left:var(--home-dock-x);top:var(--home-dock-y);width:var(--home-dock-width);height:var(--home-dock-height)}
+}
+@keyframes home-aperture-release {
+  0%,14% {clip-path:polygon(27% 0,73% 0,86% 15%,86% 85%,73% 100%,27% 100%,14% 85%,14% 15%)}
+  66%,100% {clip-path:polygon(0 0,100% 0,100% 0,100% 100%,100% 100%,0 100%,0 100%,0 0)}
+}
+@keyframes home-aperture-register {0%,76%{opacity:1}100%{opacity:0}}
+
+/* Stable scene arming is distinct from temporary image ownership. Never
+ * remove aperture-owned at handoff: doing so restarts the old entrance. */
+.hero-artwork.aperture-owned {animation:none;opacity:1;clip-path:none}
+.hero-artwork.aperture-owned>img {animation:none;transform:none;clip-path:none}
+/* The owner's existing pointer frame can measure the immediate base transform
+ * while held; no extra animation loop and no overwrite of that transform. */
+.hero-artwork.aperture-owned:has(>img.home-image-held) {transition:none}
+/* Restrict only our temporary visibility rule in reduced/off mode. Existing
+ * pending/error visibility remains authoritative rather than forcing it on. */
+@media (prefers-reduced-motion:no-preference) {
+  body:not(.motion-off) .hero-artwork>img.home-image-held {visibility:hidden!important}
+}
+@media (max-width:680px) {
+  .cinema-stage[data-to=home] .home-transfer {--home-initial-x:4%;--home-initial-y:21%;--home-initial-width:92%;--home-initial-height:58%}
+  .home-transfer .home-picture {
+    mask-image:var(--home-mask-image,linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(0deg,transparent,#000 12%,#000 86%,transparent));
+  }
+  .home-transfer .home-datum {left:6%;top:9%;font-size:10px;gap:9px}
+  .cinema-stage .home-transfer .home-register i {width:12px;height:12px}
+}
+@media (max-height:520px) {
+  .cinema-stage[data-to=home] .home-transfer {--home-initial-y:18%;--home-initial-height:64%}
+  .home-transfer .home-datum {top:6%;font-size:9px;gap:8px}
+}
+body.page-hidden .home-transfer,
+body.page-hidden .home-transfer *,
+body.page-hidden .home-transfer *::before,
+body.page-hidden .home-transfer *::after {animation-play-state:paused!important}
+body.motion-off .home-transfer {display:none!important}
+body.motion-off .home-transfer,
+body.motion-off .home-transfer * {animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce) {
+  .home-transfer {display:none!important}
+  .home-transfer,
+  .home-transfer * {animation:none!important;transition:none!important}
+}

@@ -1,0 +1,233 @@
+/*
+ * Three local image reconstructions, all finite and readiness-gated.
+ * Full-frame source coordinates survive inside every clipped picture plane.
+ * The actual study img, existing geometric ribs and readable labels are not
+ * selectors in this stylesheet. The finished composition belongs to them.
+ */
+.study-projection {
+  --projection-ink:#11191d;
+  --projection-pixel-opacity:.5;
+  --projection-pixel-filter:grayscale(.4);
+  --projection-ease:cubic-bezier(.25,.66,.2,1);
+  --projection-lifetime:none;
+  --projection-current:none;
+  --projection-divider:none;
+  --projection-axis:none;
+  --projection-axis-reveal:none;
+  --projection-light-reveal:none;
+  --projection-reflection:none;
+  --projection-curtain:none;
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:block;
+  overflow:hidden;
+  contain:paint;
+  isolation:isolate;
+  pointer-events:none;
+  user-select:none;
+}
+.study-projection *,
+.study-projection *::before,
+.study-projection *::after {box-sizing:border-box;pointer-events:none}
+.study-projection span,
+.study-projection i {display:block}
+.projection-axis {--projection-pixel-opacity:.25;--projection-pixel-filter:grayscale(1)}
+.projection-light {--projection-pixel-opacity:.72;--projection-pixel-filter:none}
+
+/* No trigger is emitted by the helper. The existing image-ready owner starts
+ * the timeline. A trigger on the persistent panel is supported as well. */
+:is(.study-art.projection-enter, #study-panel.projection-enter .study-art)[data-image-state="ready"] > .study-projection {
+  --projection-lifetime:study-projection-lifetime;
+  --projection-current:study-projection-current;
+  --projection-divider:study-projection-divider;
+  --projection-axis:study-projection-axis;
+  --projection-axis-reveal:study-projection-axis-reveal;
+  --projection-light-reveal:study-projection-light-reveal;
+  --projection-reflection:study-projection-reflection;
+  --projection-curtain:study-projection-curtain;
+}
+.projection-performance {
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  opacity:0;
+  visibility:hidden;
+  animation:var(--projection-lifetime) var(--projection-duration,1400ms) linear both;
+}
+.projection-field {position:absolute;inset:0;background:var(--projection-ink)}
+.projection-pixels {
+  position:absolute;
+  inset:0;
+  background-image:var(--projection-image);
+  background-size:cover;
+  background-position:50% 50%;
+  background-repeat:no-repeat;
+  opacity:var(--projection-pixel-opacity);
+  filter:var(--projection-pixel-filter);
+}
+
+/* TIDE: seven narrow currents begin inside one panoramic slot, separate into
+ * staggered rows, then become the exact source picture. Short debris strokes
+ * become real row dividers before dissolving into the existing frame. */
+.projection-current-strips,
+.projection-current-dividers {position:absolute;inset:0}
+.projection-current-strip {
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  clip-path:inset(var(--strip-top) -1px var(--strip-bottom) -1px);
+  transform-origin:50% 50%;
+  animation:var(--projection-current) calc(var(--projection-duration,1400ms) - var(--projection-lag,0ms)) var(--projection-ease) var(--projection-lag,0ms) both;
+}
+.projection-current-divider {
+  position:absolute;
+  left:0;
+  right:0;
+  top:var(--divider-top);
+  height:1px;
+  background:linear-gradient(90deg,#bdcfc766,#dde5dabc 58%,#b459648c);
+  opacity:0;
+  transform-origin:var(--divider-origin) 50%;
+  animation:var(--projection-divider) calc(var(--projection-duration,1400ms) - var(--projection-lag,0ms)) var(--projection-ease) var(--projection-lag,0ms) both;
+}
+
+/* AXIS: four separated image columns pivot into the pointed SVG ribs already
+ * on this study, then release a tall central crop into one full picture. No
+ * duplicate drawn ribs or new axial title competes with the existing system. */
+.projection-axis-aperture,
+.projection-axis-ribs,
+.projection-axis-plane {position:absolute;inset:0}
+.projection-axis-aperture {
+  overflow:hidden;
+  clip-path:inset(0);
+  animation:var(--projection-axis-reveal) var(--projection-duration,1400ms) var(--projection-ease) both;
+}
+.projection-axis-plane {
+  overflow:hidden;
+  transform-origin:50% 93%;
+  opacity:0;
+  --projection-rib-shape:polygon(50% 6%,66.2% 29.3%,62.15% 79%,50% 93%,37.85% 79%,33.8% 29.3%);
+  clip-path:var(--projection-rib-shape);
+  animation:var(--projection-axis) calc(var(--projection-duration,1400ms) - var(--projection-lag,0ms)) var(--projection-ease) var(--projection-lag,0ms) both;
+}
+.projection-axis-plane .projection-pixels {opacity:.66}
+/* Account for the real SVG's xMidYMax meet letterboxing at any art ratio.
+ * A pointed rib's rendered box is min(54% art width, 87% art height * 5/7).
+ * The percentage polygon above remains a safe older-browser fallback. */
+@supports (width:1cqw) {
+  .projection-axis {container-type:size}
+  .projection-axis-plane {
+    --rib-width:min(54cqw,62.142857cqh);
+    --rib-height:min(87cqh,75.6cqw);
+    --projection-rib-shape:polygon(50% calc(93% - var(--rib-height)),calc(50% + var(--rib-width)*.3) calc(93% - var(--rib-height)*.732142857),calc(50% + var(--rib-width)*.225) calc(93% - var(--rib-height)*.160714286),50% 93%,calc(50% - var(--rib-width)*.225) calc(93% - var(--rib-height)*.160714286),calc(50% - var(--rib-width)*.3) calc(93% - var(--rib-height)*.732142857));
+  }
+}
+
+/* LIGHT: one oblique luminous aperture unfolds; two temporary reflections
+ * cross at different depths while opposing dark curtains leave the picture.
+ * Reflections use only the gold-chamber source, never synthetic imagery. */
+.projection-light-aperture,
+.projection-reflection,
+.projection-curtain {position:absolute;inset:0;overflow:hidden}
+.projection-light-aperture {
+  animation:var(--projection-light-reveal) var(--projection-duration,1400ms) var(--projection-ease) both;
+}
+.projection-reflection {
+  --reflection-x:-30%;
+  --reflection-settle:9%;
+  --reflection-shear:-8deg;
+  opacity:0;
+  clip-path:polygon(32% 0,46% 0,72% 100%,50% 100%);
+  animation:var(--projection-reflection) var(--projection-duration,1400ms) var(--projection-ease) both;
+}
+.projection-reflection .projection-pixels {transform:scaleX(-1);opacity:.6}
+.projection-reflection-right {
+  --reflection-x:33%;
+  --reflection-settle:-9%;
+  --reflection-shear:7deg;
+  clip-path:polygon(64% 0,84% 0,56% 100%,38% 100%);
+}
+.projection-reflection-right .projection-pixels {transform:scale(1.16);opacity:.52}
+.projection-curtain {
+  --curtain-x:-68%;
+  --curtain-turn:-6deg;
+  clip-path:polygon(0 0,58% 0,42% 100%,0 100%);
+  background:linear-gradient(102deg,#11191d 60%,#281e13 94%,#806639 100%);
+  transform-origin:0 0;
+  animation:var(--projection-curtain) var(--projection-duration,1400ms) var(--projection-ease) both;
+}
+.projection-curtain-right {
+  --curtain-x:68%;
+  --curtain-turn:6deg;
+  clip-path:polygon(70% 0,100% 0,100% 100%,53% 100%);
+  background:linear-gradient(282deg,#11191d 44%,#2d2317 77%,#8d7447 100%);
+  transform-origin:100% 100%;
+}
+
+/* One continuous release, no flashing opacity loops or late ambient motion. */
+@keyframes study-projection-lifetime {
+  0%,86% {opacity:1;visibility:visible}
+  100% {opacity:0;visibility:hidden}
+}
+@keyframes study-projection-current {
+  0% {clip-path:inset(calc(var(--strip-top) + 4%) -1px calc(var(--strip-bottom) + 4%) -1px);transform:translate3d(var(--strip-x),var(--strip-y),0) skewX(-9deg);opacity:.72}
+  22% {clip-path:inset(calc(var(--strip-top) + 2%) -1px calc(var(--strip-bottom) + 2%) -1px);transform:translate3d(calc(var(--strip-x)*.62),calc(var(--strip-y)*.65),0) rotate(var(--strip-turn));opacity:1}
+  67%,100% {clip-path:inset(var(--strip-top) -1px var(--strip-bottom) -1px);transform:translate3d(0,0,0) rotate(0deg);opacity:1}
+}
+@keyframes study-projection-divider {
+  0% {top:50%;opacity:0;transform:scaleX(.025)}
+  17% {top:50%;opacity:.75;transform:scaleX(.045)}
+  58% {top:var(--divider-top);opacity:.65;transform:scaleX(1)}
+  83%,100% {top:var(--divider-top);opacity:0;transform:scaleX(1)}
+}
+@keyframes study-projection-axis {
+  0% {clip-path:polygon(var(--rib-left) 0,var(--rib-right) 0,var(--rib-right) 100%,var(--rib-right) 100%,var(--rib-left) 100%,var(--rib-left) 0);transform:perspective(650px) translateX(var(--rib-x)) rotateY(var(--rib-yaw)) rotate(0deg);opacity:.48}
+  25% {clip-path:polygon(var(--rib-left) 0,var(--rib-right) 0,var(--rib-right) 100%,var(--rib-right) 100%,var(--rib-left) 100%,var(--rib-left) 0);transform:perspective(650px) translateX(calc(var(--rib-x)*.25)) rotateY(calc(var(--rib-yaw)*.35)) rotate(0deg);opacity:1}
+  58% {clip-path:var(--projection-rib-shape);transform:perspective(650px) translateX(0) rotateY(0deg) rotate(var(--rib-angle));opacity:.78}
+  85%,100% {clip-path:var(--projection-rib-shape);transform:perspective(650px) translateX(0) rotateY(0deg) rotate(var(--rib-angle));opacity:0}
+}
+@keyframes study-projection-axis-reveal {
+  0%,29% {clip-path:polygon(48% 39%,52% 39%,56% 50%,54% 90%,50% 95%,46% 90%,44% 50%,48% 39%);opacity:0}
+  52% {clip-path:polygon(42% 6%,58% 6%,69% 27%,64% 84%,56% 94%,44% 94%,36% 84%,31% 27%);opacity:1}
+  83%,100% {clip-path:polygon(0 0,100% 0,100% 0,100% 100%,100% 100%,0 100%,0 100%,0 0);opacity:1}
+}
+@keyframes study-projection-light-reveal {
+  0% {clip-path:polygon(59% 0,69% 0,62% 23%,57% 50%,54% 76%,53% 100%,44% 100%,47% 76%,50% 50%,54% 23%);transform:translateX(6%) scale(1.08)}
+  31% {clip-path:polygon(36% 0,87% 0,80% 23%,71% 50%,69% 76%,79% 100%,18% 100%,32% 76%,37% 50%,36% 23%);transform:translateX(0) scale(1.035)}
+  76%,100% {clip-path:polygon(0 0,100% 0,100% 23%,100% 50%,100% 76%,100% 100%,0 100%,0 76%,0 50%,0 23%);transform:translateX(0) scale(1)}
+}
+@keyframes study-projection-reflection {
+  0% {transform:translateX(var(--reflection-x)) skewX(var(--reflection-shear));opacity:0}
+  22% {transform:translateX(calc(var(--reflection-x)*.6)) skewX(var(--reflection-shear));opacity:.72}
+  56% {transform:translateX(var(--reflection-settle)) skewX(0deg);opacity:.36}
+  79%,100% {transform:translateX(var(--reflection-settle)) skewX(0deg);opacity:0}
+}
+@keyframes study-projection-curtain {
+  0%,9% {transform:translateX(0) rotate(0deg);opacity:1}
+  59% {transform:translateX(var(--curtain-x)) rotate(var(--curtain-turn));opacity:.8}
+  80%,100% {transform:translateX(var(--curtain-x)) rotate(var(--curtain-turn));opacity:0}
+}
+
+/* The image stage remains a fixed-size, clipped pointer-free surface at 320px.
+ * Touch uses the same full composition with smaller shallow perspective. */
+@media (max-width:680px), (pointer:coarse) {
+  .projection-current-strip {--strip-turn:0deg!important}
+  .projection-axis-plane {--rib-yaw:0deg!important}
+  .projection-reflection {--reflection-shear:0deg}
+}
+
+/* Guard against an erroneous early trigger without touching the old-image
+ * ghost. Pending/error keeps its existing pixels and loading/error status. */
+.study-art:not([data-image-state="ready"]) > .study-projection {display:none!important}
+body.page-hidden .study-projection *,
+body.page-hidden .study-projection *::before,
+body.page-hidden .study-projection *::after {animation-play-state:paused!important}
+body.motion-off .study-projection,
+body:not([data-app-ready="true"]) .study-projection {display:none!important}
+body.motion-off .study-projection *,
+body:not([data-app-ready="true"]) .study-projection * {animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce) {
+  .study-projection {display:none!important}
+  .study-projection * {animation:none!important;transition:none!important}
+}

@@ -1,0 +1,192 @@
+/* Studies: registration marks -> one contact plate -> the real image frame.
+ * Load after scene-cinema.css. Only Studies' decorative bridge is replaced;
+ * .cinema-commit and its opaque coverage at the 420 ms DOM swap are unchanged.
+ * Preflight: 0–420 ms. Measured docking: 680 ms, finishing at 1100 ms.
+ */
+.cinema-stage .observation-transfer {display:none}
+.cinema-stage[data-to=studies] :is(.cinema-title-plane, .cinema-wedge, .cinema-number, .cinema-axis, .cinema-fiducials, .cinema-index, .cinema-grid, .cinema-dividers) {
+  display:none;
+  animation:none;
+}
+.cinema-stage[data-to=studies] .observation-transfer {
+  --field-ink:#11191d;
+  --field-paper:#d0d8d2;
+  --field-red:#bc5360;
+  --field-initial-x:8%;
+  --field-initial-y:18%;
+  --field-initial-width:84%;
+  --field-initial-height:64%;
+  --field-dock-duration:680ms;
+  --field-ease:cubic-bezier(.35,0,.18,1);
+  position:absolute;
+  inset:0;
+  z-index:7;
+  display:block;
+  overflow:hidden;
+  contain:paint;
+  isolation:isolate;
+  pointer-events:none;
+  user-select:none;
+  opacity:0;
+  visibility:hidden;
+}
+.observation-transfer *,
+.observation-transfer *::before,
+.observation-transfer *::after {box-sizing:border-box;pointer-events:none;user-select:none}
+.observation-transfer div,
+.observation-transfer i {display:block}
+.observation-transfer i {font-style:normal}
+.observation-transfer .field-datum {
+  position:absolute;
+  left:8%;
+  top:7%;
+  z-index:4;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:var(--field-paper);
+  font:11px/1 var(--mono);
+  letter-spacing:2px;
+  white-space:nowrap;
+}
+.observation-transfer .field-datum b {font-weight:400}
+.observation-transfer .field-datum i {width:24px;height:1px;background:var(--field-red)}
+.observation-transfer .field-frame {
+  position:absolute;
+  left:var(--field-initial-x);
+  top:var(--field-initial-y);
+  width:var(--field-initial-width);
+  height:var(--field-initial-height);
+  overflow:hidden;
+  background:var(--field-ink);
+  box-shadow:inset 0 0 0 1px #c6d4ca88;
+  opacity:1;
+}
+.observation-transfer .field-exposure,
+.observation-transfer .field-structure,
+.observation-transfer .field-register {position:absolute;inset:0;overflow:hidden}
+.observation-transfer .field-exposure {clip-path:inset(0);z-index:0}
+.observation-transfer .field-picture {
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background-image:url('./assets/observatory.webp');
+  background-position:50% 50%;
+  background-size:cover;
+  background-repeat:no-repeat;
+  filter:grayscale(.4);
+  opacity:.78;
+}
+/* Three opaque gutters expose six rectangles of ONE continuous image. */
+.observation-transfer .field-shutter {position:absolute;background:var(--field-ink)}
+.observation-transfer .field-shutter-x {top:0;width:22%;height:100%;transform:translateX(-50%) scaleX(0)}
+.observation-transfer .field-shutter-first {left:32%}
+.observation-transfer .field-shutter-second {left:68%}
+.observation-transfer .field-shutter-y {left:0;top:52%;width:100%;height:24%;transform:translateY(-50%) scaleY(0)}
+.observation-transfer .field-structure {z-index:1}
+.observation-transfer .field-rule {position:absolute;background:#d0d8d299;opacity:.8}
+.observation-transfer .field-rule-x {top:0;height:100%;width:1px;transform-origin:50% 52%;transform:scaleY(1)}
+.observation-transfer .field-rule-first {left:32%}
+.observation-transfer .field-rule-second {left:68%}
+.observation-transfer .field-rule-y {left:0;top:52%;width:100%;height:1px;background:var(--field-red);transform-origin:68% 50%;transform:scaleX(1)}
+.observation-transfer .field-register {z-index:2;box-shadow:inset 0 0 0 1px #c6d4ca44}
+.observation-transfer .field-register i {position:absolute;width:17px;height:17px;border:solid var(--field-paper);border-width:1px 0 0 1px}
+.observation-transfer .field-register i:nth-child(1) {left:0;top:0}
+.observation-transfer .field-register i:nth-child(2) {right:0;top:0;rotate:90deg}
+.observation-transfer .field-register i:nth-child(3) {right:0;bottom:0;rotate:180deg}
+.observation-transfer .field-register i:nth-child(4) {left:0;bottom:0;rotate:270deg}
+
+/* Explicit .active ownership means cancellation never leaves a floating frame. */
+.cinema-stage[data-to=studies].active .observation-transfer {animation:field-lifetime var(--cinema-duration,1120ms) linear both}
+.cinema-stage[data-to=studies].active .field-exposure {animation:field-exposure 420ms var(--field-ease) both}
+.cinema-stage[data-to=studies].active .field-shutter-x {animation:field-window-x 420ms var(--field-ease) both}
+.cinema-stage[data-to=studies].active .field-shutter-y {animation:field-window-y 420ms var(--field-ease) both}
+.cinema-stage[data-to=studies].active .field-rule-x {animation:field-register-x 400ms var(--field-ease) both}
+.cinema-stage[data-to=studies].active .field-rule-y {animation:field-register-y 400ms var(--field-ease) both}
+.cinema-stage[data-to=studies].active.field-docking .field-frame {animation:field-dock var(--field-dock-duration) var(--field-ease) both}
+.cinema-stage[data-to=studies].active.field-docking .field-picture {animation:field-image-dock var(--field-dock-duration) var(--field-ease) both}
+.cinema-stage[data-to=studies].active.field-docking .field-shutter {animation:field-shutter-release 160ms linear both}
+.cinema-stage[data-to=studies].active.field-docking .field-rule-first {animation:field-edge-left var(--field-dock-duration) var(--field-ease) both}
+.cinema-stage[data-to=studies].active.field-docking .field-rule-second {animation:field-edge-right var(--field-dock-duration) var(--field-ease) both}
+.cinema-stage[data-to=studies].active.field-docking .field-rule-y {animation:field-edge-bottom var(--field-dock-duration) var(--field-ease) both}
+.cinema-stage[data-to=studies].active.field-docking .field-register {animation:field-register-release var(--field-dock-duration) linear both}
+/* A resize can place the target wholly offscreen. Hide only this helper;
+ * retain its dock trigger/coordinates until owner cleanup, never reset/replay. */
+.cinema-stage[data-to=studies].field-retired .observation-transfer {display:none}
+
+@keyframes field-lifetime {
+  0% {opacity:0;visibility:visible}
+  9%,88% {opacity:1;visibility:visible}
+  99%,100% {opacity:0;visibility:hidden}
+}
+@keyframes field-exposure {
+  0%,18% {clip-path:inset(47% 0 47% 0)}
+  64%,100% {clip-path:inset(0)}
+}
+@keyframes field-window-x {
+  0%,35% {transform:translateX(-50%) scaleX(1)}
+  76% {transform:translateX(-50%) scaleX(.08)}
+  100% {transform:translateX(-50%) scaleX(.012)}
+}
+@keyframes field-window-y {
+  0%,24% {transform:translateY(-50%) scaleY(1)}
+  72% {transform:translateY(-50%) scaleY(.08)}
+  100% {transform:translateY(-50%) scaleY(.012)}
+}
+@keyframes field-register-x {
+  0%,22% {opacity:.7;transform:scaleY(.025)}
+  100% {opacity:.8;transform:scaleY(1)}
+}
+@keyframes field-register-y {
+  0%,10% {opacity:.7;transform:scaleX(.022)}
+  100% {opacity:.8;transform:scaleX(1)}
+}
+@keyframes field-dock {
+  0% {left:var(--field-initial-x);top:var(--field-initial-y);width:var(--field-initial-width);height:var(--field-initial-height);opacity:1}
+  76%,87% {left:var(--field-dock-x);top:var(--field-dock-y);width:var(--field-dock-width);height:var(--field-dock-height);opacity:1}
+  100% {left:var(--field-dock-x);top:var(--field-dock-y);width:var(--field-dock-width);height:var(--field-dock-height);opacity:0}
+}
+@keyframes field-image-dock {
+  0% {left:0;top:0;width:100%;height:100%;opacity:.78}
+  76%,100% {left:var(--field-image-x);top:var(--field-image-y);width:var(--field-image-width);height:var(--field-image-height);opacity:.5}
+}
+@keyframes field-edge-left {
+  0% {left:32%;opacity:.8;transform:scaleY(1)}
+  70%,100% {left:0;opacity:0;transform:scaleY(1)}
+}
+@keyframes field-edge-right {
+  0% {left:68%;opacity:.8;transform:scaleY(1)}
+  70%,100% {left:100%;opacity:0;transform:scaleY(1)}
+}
+@keyframes field-edge-bottom {
+  0% {top:52%;opacity:.8;transform:scaleX(1)}
+  70%,100% {top:100%;opacity:0;transform:scaleX(1)}
+}
+@keyframes field-register-release {0%,72%{opacity:1}100%{opacity:0}}
+@keyframes field-shutter-release {0%{opacity:1}100%{opacity:0}}
+
+/* Explicit fallbacks: no DOM measurements are needed before route commit. */
+@media (max-width:680px) {
+  .cinema-stage[data-to=studies] .observation-transfer {--field-initial-x:6%;--field-initial-y:18%;--field-initial-width:88%;--field-initial-height:64%}
+  .observation-transfer .field-datum {left:6%;top:7%;font-size:10px;gap:9px;letter-spacing:1.2px}
+  .observation-transfer .field-register i {width:12px;height:12px}
+}
+@media (max-height:520px) {
+  .cinema-stage[data-to=studies] .observation-transfer {--field-initial-y:21%;--field-initial-height:64%}
+  .observation-transfer .field-datum {top:7%;font-size:9px;gap:8px;letter-spacing:1px}
+  .observation-transfer .field-datum i {width:15px}
+}
+body.page-hidden .observation-transfer,
+body.page-hidden .observation-transfer *,
+body.page-hidden .observation-transfer *::before,
+body.page-hidden .observation-transfer *::after {animation-play-state:paused!important}
+body.motion-off .observation-transfer {display:none!important}
+body.motion-off .observation-transfer,
+body.motion-off .observation-transfer * {animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce) {
+  .observation-transfer {display:none!important}
+  .observation-transfer,
+  .observation-transfer * {animation:none!important;transition:none!important}
+}

@@ -1,0 +1,122 @@
+/*
+ * ARCHIVE: indexed image plane → foreground wordmark → clear image → native art.
+ * The observatory, theater lettering, orbit and index are the original children.
+ * Scale, unequal travel and a quiet image interval adapt the reference hierarchy;
+ * these portfolio timings do not claim to reproduce the source video's timing.
+ * .dossier-enter and --dossier-delay remain owned by Choreography. No new runtime.
+ */
+.dossier-archive .dossier-performance {display:none}
+.dossier-archive .dossier-performance,
+.dossier-archive .dossier-performance * {animation:none!important}
+
+.archive-art {--dossier-duration:1500ms;isolation:isolate}
+.detail-art > .archive-art {--dossier-duration:1600ms}
+
+/* A frame travels with the actual image; a fixed ruler keeps its coordinate.
+ * Both are empty, transparent decorations and are absent in the settled art.
+ * The existing loading/error layer (z-index:6) always remains above them.
+ */
+.archive-art::before,
+.archive-art::after {content:'';position:absolute;z-index:1;opacity:0;pointer-events:none}
+.archive-art::before {inset:0;border:1px solid #d8d2b58f}
+.archive-art::after {
+  left:7%;
+  top:11%;
+  bottom:17%;
+  width:19px;
+  border-left:1px solid #d8d2b58f;
+  background:
+    repeating-linear-gradient(0deg,#d8d2b5a6 0 1px,transparent 1px 5%) 0 0 / 5px 100% no-repeat,
+    repeating-linear-gradient(0deg,#d8d2b58f 0 1px,transparent 1px 25%) 0 0 / 19px 100% no-repeat;
+  transform-origin:0 100%;
+}
+
+/* Individual transforms leave the source transform and its hover untouched. */
+.dossier-enter .archive-art > img {
+  animation:archive-image-depth var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .archive-art > b {
+  transform-origin:0 50%;
+  animation:archive-wordmark-depth var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .archive-art > .archive-circle {
+  animation:archive-orbit-depth var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .archive-art > span:not(.asset-status) {
+  animation:archive-index-anchor var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .archive-art::before {
+  animation:archive-image-register var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+.dossier-enter .archive-art::after {
+  animation:archive-depth-ruler var(--dossier-duration) var(--dossier-delay,0ms) linear both;
+}
+
+/* The small image is farther away and softer than the sharp foreground type.
+ * It expands more slowly and travels less, then gets a held, unobstructed beat.
+ * Its final .65 opacity is the native styles.css value, not a lasting upgrade.
+ */
+@keyframes archive-image-depth {
+  0%,16% {translate:20% -8%;scale:.62;opacity:.48;filter:blur(1.2px);animation-timing-function:cubic-bezier(.2,.75,.18,1)}
+  38%,44% {translate:8% 2%;scale:1.18;opacity:.72;filter:blur(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  58%,76% {translate:-1% 0;scale:1.08;opacity:.88;filter:none;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  100% {translate:0 0;scale:1;opacity:.65;filter:none}
+}
+@keyframes archive-wordmark-depth {
+  0%,16% {translate:-36% 112%;scale:2.85;opacity:1;animation-timing-function:cubic-bezier(.2,.75,.18,1)}
+  38%,42% {translate:38% -12%;scale:2.25;opacity:1;animation-timing-function:cubic-bezier(.55,0,.8,.4)}
+  54%,76% {translate:-12% -135%;scale:1.6;opacity:0;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  96%,100% {translate:0 0;scale:1;opacity:1}
+}
+@keyframes archive-orbit-depth {
+  0%,16% {translate:-38% -9%;scale:1.68;opacity:.55;animation-timing-function:cubic-bezier(.2,.75,.18,1)}
+  38%,42% {translate:-12% 4%;scale:1.25;opacity:.35;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  56%,76% {translate:4% 0;scale:1.08;opacity:0;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  100% {translate:0 0;scale:1;opacity:1}
+}
+@keyframes archive-index-anchor {
+  0%,76% {background-color:#10181ce6;box-shadow:0 0 0 5px #10181ce6;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  100% {background-color:transparent;box-shadow:none}
+}
+@keyframes archive-image-register {
+  0%,16% {translate:20% -8%;scale:.62;opacity:.72;animation-timing-function:cubic-bezier(.2,.75,.18,1)}
+  38%,44% {translate:8% 2%;scale:1.18;opacity:.36;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  58%,100% {translate:-1% 0;scale:1.08;opacity:0}
+}
+@keyframes archive-depth-ruler {
+  0%,16% {scale:1 .66;opacity:.8;animation-timing-function:cubic-bezier(.2,.75,.18,1)}
+  38%,44% {scale:1;opacity:.48;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  58%,100% {scale:1;opacity:0}
+}
+
+/* Cancellation reveals the unchanged source art, including during first delay.
+ * Pending/error never animates its status node. A hidden tab pauses the existing
+ * clock rather than removing/re-adding ownership or replaying the entrance.
+ */
+body.motion-off .archive-art > :not(.asset-status),
+body.motion-off .archive-art::before,
+body.motion-off .archive-art::after,
+.dialog-closing .archive-art > :not(.asset-status),
+.dialog-closing .archive-art::before,
+.dialog-closing .archive-art::after,
+body:not([data-app-ready=true]) .archive-art > :not(.asset-status),
+body:not([data-app-ready=true]) .archive-art::before,
+body:not([data-app-ready=true]) .archive-art::after,
+.archive-art:is([data-image-state=pending],[data-image-state=error]) > :not(.asset-status),
+.archive-art:is([data-image-state=pending],[data-image-state=error])::before,
+.archive-art:is([data-image-state=pending],[data-image-state=error])::after {animation:none!important;transition:none!important}
+body.page-hidden .archive-art > :not(.asset-status),
+body.page-hidden .archive-art::before,
+body.page-hidden .archive-art::after {animation-play-state:paused!important}
+@media (prefers-reduced-motion:reduce) {
+  .archive-art > :not(.asset-status),
+  .archive-art::before,
+  .archive-art::after {animation:none!important;transition:none!important}
+}
+@media (forced-colors:active), print {
+  .archive-art > :not(.asset-status),
+  .archive-art::before,
+  .archive-art::after {animation:none!important;transition:none!important}
+  .archive-art::before,
+  .archive-art::after {display:none}
+}

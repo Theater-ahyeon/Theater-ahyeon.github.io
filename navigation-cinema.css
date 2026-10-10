@@ -1,0 +1,438 @@
+/*
+ * ARCHIVAL CHAPTER MECHANISM
+ * Add after styles.css and other scene sheets; opt in with mountNavigationCinema().
+ * One 1.24 s score, restarted solely by the existing .kinetic-change commit.
+ * Fixed chapter labels remain the anchor while planes become dividers and docks.
+ * No rail positioning/transform ownership, photo selectors, loops or new text.
+ */
+.sidebar.navigation-cinema {
+  --nc-accent: #ce3c4e;
+  --nc-rule: #b9c9ca;
+  --nc-paper: #e4e5dd;
+  --nc-score: 1240ms;
+  --nc-ease: cubic-bezier(.22, 1, .36, 1);
+}
+body[data-scene="about"] .sidebar.navigation-cinema { --nc-accent: #b39860; }
+
+/* The new furniture is absolute, inert, empty and never contributes to hitboxes. */
+.navigation-cinema :is(.nav-register, .nav-conduit, .nav-record-plane, .portrait-aperture),
+.navigation-cinema :is(.nav-register, .nav-conduit, .nav-record-plane, .portrait-aperture) * {
+  pointer-events: none;
+  user-select: none;
+}
+.navigation-cinema :is(.nav-register, .nav-conduit, .nav-record-plane, .portrait-aperture) i {
+  display: block;
+  position: absolute;
+  inset: auto;
+  font-style: normal;
+  width: auto;
+  height: auto;
+  background: none;
+  transform: none;
+  box-shadow: none;
+}
+
+/* A quiet ruled register becomes a full-height architectural division at commit. */
+.navigation-cinema .nav-register {
+  position: absolute;
+  inset: 24px 4px 10px 7px;
+  z-index: 0;
+}
+.navigation-cinema .nav-register > i:nth-child(1) {
+  inset: 0 0 0 auto;
+  width: 1px;
+  background: var(--nc-rule);
+  opacity: .14;
+  transform-origin: top;
+}
+.navigation-cinema .nav-register > i:nth-child(2) {
+  inset: 0 4px 0 auto;
+  width: 5px;
+  background: repeating-linear-gradient(0deg, var(--nc-rule) 0 1px, transparent 1px 13px);
+  opacity: .24;
+  transform-origin: top right;
+}
+.navigation-cinema .nav-register > i:nth-child(3) {
+  inset: 0 auto 0 0;
+  width: 1px;
+  background: var(--nc-accent);
+  opacity: .12;
+  transform-origin: bottom;
+}
+
+/* The paper bed is never removed: even the first selection frame is readable. */
+.navigation-cinema .chapter-link.active::before {
+  transform: scaleX(1);
+  background: var(--nc-paper);
+  transition: none;
+}
+.navigation-cinema .chapter-link.active::after { background: var(--nc-accent); }
+.navigation-cinema .chapter-link.active .nav-number { animation: none; }
+.navigation-cinema .chapter-link .nav-copy,
+.navigation-cinema .chapter-link:not(.active):hover .nav-copy,
+.navigation-cinema .chapter-link:focus-visible .nav-copy,
+.navigation-cinema .chapter-link:active .nav-copy {
+  transform: none;
+}
+.navigation-cinema .chapter-link.is-pressed { transform: none !important; }
+.navigation-cinema .chapter-link:focus-visible {
+  outline: 2px solid var(--nc-accent);
+  outline-offset: -3px;
+}
+.navigation-cinema .chapter-link:focus-visible:not(.active) {
+  color: var(--nc-paper);
+}
+.navigation-cinema .chapter-link:focus-visible:not(.active)::before {
+  background: #293238;
+  transform: scaleX(1);
+}
+
+/* Three shallow sheets register around, rather than sweep across, the text. */
+.navigation-cinema .nav-record-plane {
+  position: absolute;
+  inset: 5px 20px 5px 13px;
+  z-index: -1;
+  opacity: 0;
+  color: #26363d;
+  transition: opacity 220ms ease;
+}
+.navigation-cinema .chapter-link.active .nav-record-plane { opacity: 1; }
+.navigation-cinema .nav-record-plane > i:nth-child(1) {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 7px;
+  border-top: 1px solid #26363d45;
+  background: linear-gradient(90deg, #26363d0d 0 29%, transparent 29% 75%, #26363d13 75%);
+  transform-origin: left top;
+}
+.navigation-cinema .nav-record-plane > i:nth-child(2) {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  border-bottom: 1px solid #26363d36;
+  background: linear-gradient(90deg, #26363d13 0 17%, transparent 17% 84%, #26363d0d 84%);
+  transform-origin: right bottom;
+}
+.navigation-cinema .nav-record-plane > i:nth-child(3) {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 8px;
+  border-right: 1px solid #26363d45;
+  background: linear-gradient(0deg, #26363d12 0 6px, transparent 6px calc(100% - 7px), #26363d12 calc(100% - 7px));
+  transform-origin: right;
+}
+.navigation-cinema .chapter-link:not(.active):is(:hover, :focus-visible) .nav-record-plane {
+  opacity: .65;
+  filter: invert(1);
+}
+.navigation-cinema .chapter-link:is(:active, .is-pressed) .nav-record-plane {
+  opacity: .45;
+  scale: .985 1;
+}
+
+/* Existing moving parent retains --rail-x, --rail-y, size and transform ownership. */
+.navigation-cinema .nav-traveller::before,
+.navigation-cinema .nav-traveller::after { border-color: var(--nc-accent); }
+.navigation-cinema .nav-traveller > i {
+  width: 3px;
+  height: 11px;
+  right: 8px;
+  background: var(--nc-accent);
+  transform: translateY(-50%);
+  box-shadow: none;
+}
+.navigation-cinema .nav-traveller > b {
+  background: var(--nc-accent);
+  opacity: .25;
+  transform-origin: center;
+}
+.navigation-cinema .nav-conduit {
+  position: absolute;
+  inset: 0;
+  color: var(--nc-accent);
+}
+.navigation-cinema .nav-conduit > i:nth-child(1) {
+  right: 4px;
+  top: 50%;
+  bottom: -9px;
+  width: 16px;
+  border: solid currentColor;
+  border-width: 1px 1px 0 0;
+  opacity: .62;
+  transform-origin: top right;
+}
+.navigation-cinema .nav-conduit > i:nth-child(2) {
+  right: 0;
+  bottom: -9px;
+  width: 9px;
+  height: 1px;
+  background: currentColor;
+  opacity: .62;
+  transform-origin: right;
+}
+
+/* The existing chapter motif is the only symbol: rectangular drafting brackets
+ * replace the legacy orbit/diamond decoration, and only the destination traces. */
+.sidebar.navigation-cinema.kinetic-change .nav-mark { animation: none; }
+.navigation-cinema .nav-mark { transition: opacity 220ms ease; transform: none; }
+.navigation-cinema .nav-mark i:first-child,
+.navigation-cinema .chapter-link:hover .nav-mark i:first-child {
+  border-width: 1px 0 0 1px;
+  border-radius: 0;
+  transform: none;
+  inset: -2px 12px 12px -2px;
+  opacity: .35;
+}
+.navigation-cinema .nav-mark i:nth-child(2) {
+  border-width: 0 1px 1px 0;
+  border-radius: 0;
+  transform: none;
+  inset: 12px -2px -2px 12px;
+  opacity: .35;
+}
+.navigation-cinema .chapter-link[data-route="studies"]:hover .nav-mark svg {
+  animation: none;
+}
+.navigation-cinema .chapter-link[data-route="works"]:hover .nav-mark svg { transform: none; }
+.navigation-cinema .chapter-link:is(:hover, :focus-visible) .nav-mark path {
+  animation: nc-motif-touch 650ms var(--nc-ease) both;
+}
+
+/* All commit movement shares the same timeline, including quiet hold/release.
+ * Plate 0–.58 s → conduit .2–.9 s → motif .48–1.12 s → frame release 1.24 s. */
+.navigation-cinema.kinetic-change .nav-register > i:nth-child(1) {
+  animation: nc-register-rule var(--nc-score) var(--nc-ease) both;
+}
+.navigation-cinema.kinetic-change .nav-register > i:nth-child(2) {
+  animation: nc-register-ticks var(--nc-score) var(--nc-ease) both;
+}
+.navigation-cinema.kinetic-change .nav-register > i:nth-child(3) {
+  animation: nc-register-return var(--nc-score) var(--nc-ease) both;
+}
+.navigation-cinema.kinetic-change .chapter-link.active .nav-record-plane > i:nth-child(1) {
+  animation: nc-plate-head var(--nc-score) var(--nc-ease) both;
+}
+.navigation-cinema.kinetic-change .chapter-link.active .nav-record-plane > i:nth-child(2) {
+  animation: nc-plate-foot var(--nc-score) var(--nc-ease) both;
+}
+.navigation-cinema.kinetic-change .chapter-link.active .nav-record-plane > i:nth-child(3) {
+  animation: nc-plate-jamb var(--nc-score) var(--nc-ease) both;
+}
+.navigation-cinema.kinetic-change .nav-traveller > b {
+  animation: nc-bracket-lock var(--nc-score) var(--nc-ease) both;
+}
+.navigation-cinema.kinetic-change .nav-conduit > i:nth-child(1) {
+  animation: nc-conduit-dock var(--nc-score) var(--nc-ease) both;
+}
+.navigation-cinema.kinetic-change .nav-conduit > i:nth-child(2) {
+  animation: nc-conduit-key var(--nc-score) var(--nc-ease) both;
+}
+.sidebar.navigation-cinema.kinetic-change .chapter-link.active .nav-mark path {
+  animation: nc-motif-score var(--nc-score) var(--nc-ease) both;
+}
+
+/* Original artwork pixels are untouched. Four dark mat leaves briefly change
+ * the aperture: horizontal slot → portrait → full image. Frame stays registered. */
+.navigation-cinema .portrait-rings { display: none; }
+.navigation-cinema .portrait-aperture {
+  position: absolute;
+  inset: 8px 9px 11px;
+  z-index: 1;
+  overflow: hidden;
+}
+.navigation-cinema .portrait-aperture::before,
+.navigation-cinema .portrait-aperture::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  z-index: 2;
+  pointer-events: none;
+}
+.navigation-cinema .portrait-aperture::before {
+  background:
+    linear-gradient(var(--nc-rule), var(--nc-rule)) left top / 26px 1px no-repeat,
+    linear-gradient(var(--nc-rule), var(--nc-rule)) left top / 1px 19px no-repeat,
+    linear-gradient(var(--nc-rule), var(--nc-rule)) right bottom / 26px 1px no-repeat,
+    linear-gradient(var(--nc-rule), var(--nc-rule)) right bottom / 1px 19px no-repeat;
+  opacity: .45;
+}
+.navigation-cinema .portrait-aperture::after {
+  inset: 5px 5px auto auto;
+  width: 18px;
+  height: 18px;
+  border-top: 1px solid var(--nc-accent);
+  border-right: 1px solid var(--nc-accent);
+  opacity: .7;
+}
+.navigation-cinema .portrait-aperture > i { background: #111517; opacity: 0; }
+.navigation-cinema .portrait-aperture > i:nth-child(1) {
+  left: 0; right: 0; top: 0; height: 44%;
+  border-bottom: 1px solid #b9c9ca44;
+  transform-origin: top;
+}
+.navigation-cinema .portrait-aperture > i:nth-child(2) {
+  left: 0; right: 0; bottom: 0; height: 44%;
+  border-top: 1px solid #b9c9ca44;
+  transform-origin: bottom;
+}
+.navigation-cinema .portrait-aperture > i:nth-child(3) {
+  left: 0; top: 0; bottom: 0; width: 31%;
+  border-right: 1px solid #b9c9ca44;
+  transform-origin: left;
+}
+.navigation-cinema .portrait-aperture > i:nth-child(4) {
+  right: 0; top: 0; bottom: 0; width: 31%;
+  border-left: 1px solid #b9c9ca44;
+  transform-origin: right;
+}
+.navigation-cinema.kinetic-change .portrait-aperture > i:nth-child(-n+2) {
+  animation: nc-portrait-slot var(--nc-score) var(--nc-ease) both;
+}
+.navigation-cinema.kinetic-change .portrait-aperture > i:nth-child(n+3) {
+  animation: nc-portrait-jamb var(--nc-score) var(--nc-ease) both;
+}
+.navigation-cinema.kinetic-change .portrait-aperture::before {
+  animation: nc-portrait-register var(--nc-score) var(--nc-ease) both;
+}
+
+@keyframes nc-register-rule {
+  0% { transform: scaleY(.04); opacity: .8; }
+  36%, 60% { transform: scaleY(1); opacity: .55; }
+  100% { transform: scaleY(1); opacity: .14; }
+}
+@keyframes nc-register-ticks {
+  0%, 8% { transform: scaleX(3) scaleY(.04); opacity: .6; }
+  44% { transform: scaleX(3) scaleY(1); opacity: .48; }
+  76%, 100% { transform: scale(1); opacity: .24; }
+}
+@keyframes nc-register-return {
+  0%, 10% { transform: scaleY(.06); opacity: .7; }
+  54% { transform: scaleY(1); opacity: .5; }
+  100% { transform: scaleY(1); opacity: .12; }
+}
+@keyframes nc-plate-head {
+  0% { transform: translateX(-8px) scaleX(.08) scaleY(2.4); opacity: .8; }
+  22% { transform: translateX(0) scaleX(.66) scaleY(2.4); opacity: 1; }
+  47%, 100% { transform: none; opacity: 1; }
+}
+@keyframes nc-plate-foot {
+  0%, 8% { transform: translateX(9px) scaleX(.1) scaleY(2.6); opacity: .8; }
+  31% { transform: translateX(0) scaleX(.78) scaleY(2.6); opacity: 1; }
+  57%, 100% { transform: none; opacity: 1; }
+}
+@keyframes nc-plate-jamb {
+  0%, 16% { transform: translateX(8px) scaleY(.08); opacity: .2; }
+  51% { transform: translateX(0) scaleY(1); opacity: 1; }
+  100% { transform: none; opacity: 1; }
+}
+@keyframes nc-bracket-lock {
+  0%, 18% { transform: scaleY(.12); opacity: .85; }
+  67% { transform: scaleY(1.2); opacity: .7; }
+  100% { transform: none; opacity: .25; }
+}
+@keyframes nc-conduit-dock {
+  0%, 16% { transform: scaleX(.1) scaleY(.04); opacity: .9; }
+  47% { transform: scaleX(1) scaleY(.04); opacity: .9; }
+  75%, 100% { transform: none; opacity: .62; }
+}
+@keyframes nc-conduit-key {
+  0%, 52% { transform: scaleX(.1); opacity: 0; }
+  80% { transform: scaleX(1.8); opacity: 1; }
+  100% { transform: scaleX(1); opacity: .62; }
+}
+@keyframes nc-motif-score {
+  0%, 38% { stroke-dashoffset: 1; }
+  90%, 100% { stroke-dashoffset: 0; }
+}
+@keyframes nc-motif-touch { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes nc-portrait-slot {
+  0%, 12% { transform: scaleY(1); opacity: 1; }
+  42%, 53% { transform: scaleY(.16); opacity: 1; }
+  86% { transform: scaleY(0); opacity: 1; }
+  100% { transform: scaleY(0); opacity: 0; }
+}
+@keyframes nc-portrait-jamb {
+  0%, 12% { transform: scaleX(0); opacity: 1; }
+  41%, 53% { transform: scaleX(1); opacity: 1; }
+  88% { transform: scaleX(0); opacity: 1; }
+  100% { transform: scaleX(0); opacity: 0; }
+}
+@keyframes nc-portrait-register {
+  0%, 12% { clip-path: inset(44% 0); opacity: .8; }
+  42%, 53% { clip-path: inset(0 27%); opacity: .8; }
+  88%, 100% { clip-path: inset(0); opacity: .45; }
+}
+
+/* The existing 172px sidebar, horizontal 320px layout and 320px-tall landscape
+ * retain exactly their original dimensions, padding, flex and nav target sizes. */
+@media (min-width: 681px) and (max-width: 980px) {
+  .navigation-cinema .nav-record-plane { right: 12px; left: 10px; }
+  .navigation-cinema .nav-conduit > i:nth-child(1) { width: 9px; }
+}
+@media (min-width: 681px) and (max-height: 560px) {
+  .navigation-cinema .nav-register { top: 8px; bottom: 8px; }
+  .navigation-cinema .nav-record-plane { top: 4px; bottom: 4px; }
+}
+@media (min-width: 681px) and (max-height: 360px) {
+  .navigation-cinema .nav-register { top: 6px; bottom: 6px; }
+  .navigation-cinema .nav-record-plane > i:nth-child(1),
+  .navigation-cinema .nav-record-plane > i:nth-child(2) { height: 3px; }
+}
+@media (max-width: 680px) {
+  .navigation-cinema .nav-register { inset: 0; }
+  .navigation-cinema .nav-register > i:nth-child(1) {
+    inset: auto 0 0; width: auto; height: 1px; transform-origin: left;
+  }
+  .navigation-cinema .nav-register > i:nth-child(2) { display: none; }
+  .navigation-cinema .nav-register > i:nth-child(3) {
+    inset: 0 0 auto; width: auto; height: 1px; transform-origin: right;
+  }
+  .navigation-cinema.kinetic-change .nav-register > i:nth-child(1),
+  .navigation-cinema.kinetic-change .nav-register > i:nth-child(3) {
+    animation-name: nc-mobile-rule;
+  }
+  .navigation-cinema .nav-record-plane { inset: 3px 5px; }
+  .navigation-cinema .nav-record-plane > i:nth-child(1),
+  .navigation-cinema .nav-record-plane > i:nth-child(2) { height: 3px; }
+  .navigation-cinema .nav-record-plane > i:nth-child(3) { width: 4px; }
+  .navigation-cinema .nav-traveller > i {
+    top: auto; bottom: 3px; right: 50%; width: 7px; height: 2px; transform: translateX(50%);
+  }
+  .navigation-cinema .nav-conduit > i:nth-child(1) {
+    top: auto; right: 6px; bottom: 4px; width: calc(50% - 6px); height: 5px;
+    border-width: 0 1px 1px 0; transform-origin: bottom left; opacity: .5;
+  }
+  .navigation-cinema .nav-conduit > i:nth-child(2) { display: none; }
+  .navigation-cinema.kinetic-change .nav-conduit > i:nth-child(1) { animation-name: nc-mobile-dock; }
+}
+@keyframes nc-mobile-rule {
+  0% { transform: scaleX(.04); opacity: .6; }
+  52% { transform: scaleX(1); opacity: .55; }
+  100% { transform: scaleX(1); opacity: .14; }
+}
+@keyframes nc-mobile-dock {
+  0%, 22% { transform: scaleX(.04); opacity: .9; }
+  73%, 100% { transform: scaleX(1); opacity: .5; }
+}
+
+/* Pausing resolves decorative mats immediately. Hidden tabs pause the finite
+ * score on the same body hook already managed by Choreography.visibility(). */
+body.page-hidden .navigation-cinema *,
+body.page-hidden .navigation-cinema *::before,
+body.page-hidden .navigation-cinema *::after { animation-play-state: paused !important; }
+body.motion-off .navigation-cinema *,
+body.motion-off .navigation-cinema *::before,
+body.motion-off .navigation-cinema *::after { animation: none !important; transition: none !important; }
+body.motion-off .navigation-cinema .portrait-aperture > i { display: none; }
+body.motion-off .navigation-cinema .nav-record-plane { scale: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .navigation-cinema *, .navigation-cinema *::before, .navigation-cinema *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .navigation-cinema .portrait-aperture > i { display: none; }
+  .navigation-cinema .nav-record-plane { scale: 1; }
+}
