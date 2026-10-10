@@ -1,6 +1,6 @@
-import {studyImageProjection} from './study-projections.js?v=21.5-public2';
-import {projectDossierPlanes,detailDossierPlanes} from './dossier-planes.js?v=21.5-public2';
-import {profile, projects, studies, contributions} from './data.js?v=21.5-public2';
+import {studyImageProjection} from './study-projections.js?v=21.6-public3';
+import {projectDossierPlanes,detailDossierPlanes} from './dossier-planes.js?v=21.6-public3';
+import {profile, projects, studies, contributions} from './data.js?v=21.6-public3';
 const escapeText=value=>String(value).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
 const name=escapeText(profile.name),tagline=escapeText(profile.tagline);
 const axialRibs=Array.from({length:4},()=>'<i class="axial-rib"><svg viewBox="0 0 200 280" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><path class="rib-shell" pathLength="1" vector-effect="non-scaling-stroke" d="M100 0 160 75 145 235 100 280 55 235 40 75Z"/><path class="rib-spine" pathLength="1" vector-effect="non-scaling-stroke" d="M100 0V280"/></svg></i>').join('');
