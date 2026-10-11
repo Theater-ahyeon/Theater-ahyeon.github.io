@@ -50,7 +50,7 @@
 .opening-window-image{position:absolute;inset:0;background-size:cover;filter:grayscale(1) contrast(1.12);opacity:.76;transform:scale(1.12);animation:opening-window-image 1.1s var(--opening-ease) both;animation-delay:calc(.55s + var(--opening-i)*.075s)}
 .opening-window-image:after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#081116dc,transparent 53%,#08111635)}
 .opening-window-sea .opening-window-image{background-image:url('./assets/observatory.webp');background-position:4% 90%;background-size:190%}
-.opening-window-showreel .opening-window-image{background-image:url('./assets/project-midnight.svg');background-position:center;background-size:cover}
+.opening-window-showreel .opening-window-image{background-color:#101a21;background-position:center;background-size:cover}.opening-window-image>img{display:block;width:100%;height:100%;object-fit:cover}
 .opening-window-dialogue .opening-window-image{background:#c9cdc3}
 .opening-mini-dialogue{position:absolute;inset:19% 16%;border:1px solid #122631;transform:rotate(-9deg);padding:15px;background:#dedfd6}
 .opening-mini-dialogue i{display:block;width:70%;height:5px;background:#50656d;margin-bottom:9px}

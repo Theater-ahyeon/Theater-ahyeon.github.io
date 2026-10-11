@@ -5,11 +5,14 @@
  * then the existing .leaving lifecycle opens the aperture over 650ms.
  * Timings are original interface choreography, not measurements of source PVs.
  */
-export function openingLayers(name='theater') {
-  const brand=String(name).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function openingLayers(name='theater',projectList=[]) {
+  const escapeText=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const brand=escapeText(name);
+  const imageProject=projectList.find(p=>p.image||p.artImage);
+  const dialogueProjects=projectList.filter(p=>p.artKind==='dialogue').slice(0,2);
   const windows = [
-    ['showreel', '01', 'MIDNIGHT', 'AI AGENT WORKBENCH'],
-    ['dialogue', '02', 'SUBTEXT / AIRP', 'CONVERSATION + MEMORY'],
+    [imageProject?'showreel':'arch', '01', imageProject?.title||'SPATIAL RECORD', imageProject?.category||'ENVIRONMENT STUDY'],
+    [dialogueProjects.length?'dialogue':'geometry', '02', dialogueProjects.map(p=>p.title).join(' / ')||'INTERACTION', dialogueProjects.length?'INTERACTION STUDIES':'GEOMETRY STUDY'],
     ['sea', '03', 'PUBLIC WORKS', 'CODE + INTERACTION'],
     ['observatory', '04', 'ORBIT', 'ENVIRONMENT STUDY'],
     ['letterform', '05', 'LETTERFORM', 'TYPE STUDY'],
@@ -39,9 +42,9 @@ export function openingLayers(name='theater') {
       <div class="opening-dossier-heading"><span>INDEXED FRAGMENTS</span><span>01 — 08 / VISUAL STUDIES</span></div>
       <div class="opening-dossier-grid">${windows.map(([crop,index,label,caption],i)=>`
         <div class="opening-window opening-window-${crop}" style="--opening-i:${i}">
-          <div class="opening-window-image">${crop==='letterform'?`<b class="opening-window-type">${brand}</b>`:crop==='dialogue'?'<b class="opening-mini-dialogue"><i></i><i></i><i></i><em>↳</em></b>':''}</div><i class="opening-window-invert"></i>
+          <div class="opening-window-image">${crop==='showreel'&&imageProject?`<img src="${escapeText(imageProject.image||imageProject.artImage)}" alt="">`:crop==='letterform'?`<b class="opening-window-type">${brand}</b>`:crop==='dialogue'?'<b class="opening-mini-dialogue"><i></i><i></i><i></i><em>↳</em></b>':''}</div><i class="opening-window-invert"></i>
           <span class="opening-window-index">${index}<i>+</i></span>
-          <span class="opening-window-caption">${label}<small>${caption}</small></span>
+          <span class="opening-window-caption">${escapeText(label)}<small>${escapeText(caption)}</small></span>
         </div>`).join('')}
       </div>
       <div class="opening-dossier-baseline"><span>FIELD RECORD / ${brand}</span><span>VISUAL ARCHIVE</span></div>

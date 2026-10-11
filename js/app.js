@@ -1,15 +1,15 @@
-import {homeTransfer,dockHomeTransfer,refreshHomeTransfer,clearHomeTransfer} from './home-transfer.js?v=21.7-public4';
-import {planDossierReturn,containedImageRect} from './dossier-return.js?v=21.7-public4';
-import {observationTransfer,dockObservationTransfer,refreshObservationTransfer,clearObservationTransfer} from './observation-transfer.js?v=21.7-public4';
-import {mountNavigationCinema} from './navigation-cinema.js?v=21.7-public4';
-import {openingLayers} from './opening-layers.js?v=21.7-public4';
-import {monitorImage} from './media.js?v=21.7-public4';
-import {profile, chapters, projects, studies} from './data.js?v=21.7-public4';
-import {home,works,studiesView,about,projectDetail,studyPanel,studySource} from './components.js?v=21.7-public4';
-import {AmbientField} from './motion.js?v=21.7-public4';
-import {Choreography} from './choreography.js?v=21.7-public4';
+import {homeTransfer,dockHomeTransfer,refreshHomeTransfer,clearHomeTransfer} from './home-transfer.js?v=21.8-public5';
+import {planDossierReturn,containedImageRect} from './dossier-return.js?v=21.8-public5';
+import {observationTransfer,dockObservationTransfer,refreshObservationTransfer,clearObservationTransfer} from './observation-transfer.js?v=21.8-public5';
+import {mountNavigationCinema} from './navigation-cinema.js?v=21.8-public5';
+import {openingLayers} from './opening-layers.js?v=21.8-public5';
+import {monitorImage} from './media.js?v=21.8-public5';
+import {profile, chapters, projects, studies} from './data.js?v=21.8-public5';
+import {home,works,studiesView,about,projectDetail,studyPanel,studySource} from './components.js?v=21.8-public5';
+import {AmbientField} from './motion.js?v=21.8-public5';
+import {Choreography} from './choreography.js?v=21.8-public5';
 const main=document.querySelector('#main'),intro=document.querySelector('#intro'),dialog=document.querySelector('#detail-dialog'),shell=document.querySelector('.app-shell');
-intro.insertAdjacentHTML?.('afterbegin',openingLayers(profile.name));
+intro.insertAdjacentHTML?.('afterbegin',openingLayers(profile.name,projects));
 document.querySelector('.transition-veil').insertAdjacentHTML?.('afterbegin',observationTransfer()+homeTransfer());
 const media=window.matchMedia('(prefers-reduced-motion: reduce)');
 let storedMotion;try{storedMotion=localStorage.getItem('theater-motion')}catch{}

@@ -19,3 +19,5 @@
 .project-art-caption{right:auto;max-width:calc(100% - 40px);padding:4px 7px;background:#14242be8;color:#eef3ec;text-shadow:none;letter-spacing:.5px}
 .global-controls .icon-button{min-height:44px}
 @media(max-width:680px){.global-controls .icon-button{font-size:11px}.global-controls{gap:8px}.motion-system{max-width:42px}}
+
+.empty-projects{grid-column:1/-1;padding:28px 0;color:#48565e;font:14px/1.9 var(--sans);border-top:1px solid #79838244}
