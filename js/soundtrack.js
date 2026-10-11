@@ -10,6 +10,10 @@
 const mounts = new WeakMap();
 const VOLUME_KEY = 'theater-audio-volume';
 const DEFAULT_VOLUME = 24;
+// Chromium 64-second offline review: 100% output peaked at -3.9 dBFS.
+// Playback always starts from silence on an explicit click; no live gain migration.
+const MAX_OUTPUT_GAIN = 1.3;
+const START_FADE_SECONDS = 0.24;
 const BPM = 120;
 const STEP_SECONDS = 60 / BPM / 4;
 const midi = note => 440 * 2 ** ((note - 69) / 12);
@@ -35,6 +39,17 @@ function boundedVolume(value, fallback = DEFAULT_VOLUME) {
   if (typeof value === 'string' && !/^\d+(?:\.\d+)?$/.test(value.trim())) return fallback;
   const number = Number(value);
   return Number.isFinite(number) ? Math.round(Math.min(100, Math.max(0, number))) : fallback;
+}
+
+/** Preserve the current envelope when a slider interrupts its start/target ramp. */
+function retargetGain(param, value, now) {
+  if (typeof param.cancelAndHoldAtTime === 'function') param.cancelAndHoldAtTime(now);
+  else {
+    const current = param.value;
+    param.cancelScheduledValues(now);
+    param.setValueAtTime(current, now);
+  }
+  param.setTargetAtTime(value, now, 0.035);
 }
 
 /** A new bounded node graph for each play; the AudioContext is reused. */
@@ -214,7 +229,7 @@ export function mountSoundtrack(root = document) {
   let state = 'idle', destroyed = false, generation = 0;
   let context = null, output = null, score = null, pendingSuspend = null;
   const hidden = () => Boolean(doc.hidden) || doc.visibilityState === 'hidden';
-  const targetGain = () => volume / 100 * 0.65;
+  const targetGain = () => volume / 100 * MAX_OUTPUT_GAIN;
   const labels = {
     idle:'原创电子配乐 · 点击播放', starting:'原创电子配乐 · 正在准备',
     playing:'原创电子配乐 · 播放中', paused:'原创电子配乐 · 已暂停',
@@ -307,7 +322,7 @@ export function mountSoundtrack(root = document) {
       });
       output.gain.cancelScheduledValues(context.currentTime);
       output.gain.setValueAtTime(0, context.currentTime);
-      output.gain.linearRampToValueAtTime(targetGain(), context.currentTime + 0.09);
+      output.gain.linearRampToValueAtTime(targetGain(), context.currentTime + START_FADE_SECONDS);
       render('playing');
     } catch {
       if (destroyed || token !== generation) return;
@@ -336,8 +351,7 @@ export function mountSoundtrack(root = document) {
     try { view.localStorage.setItem(VOLUME_KEY, String(volume)); } catch {}
     render(state);
     if (state === 'playing' && output && context) {
-      output.gain.cancelScheduledValues(context.currentTime);
-      output.gain.setTargetAtTime(targetGain(), context.currentTime, 0.035);
+      retargetGain(output.gain, targetGain(), context.currentTime);
     }
   }
   function onVisibility() { if (hidden()) pause('hidden'); }
