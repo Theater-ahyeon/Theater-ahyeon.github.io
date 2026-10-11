@@ -1,4 +1,4 @@
-import {mountSoundtrack} from './soundtrack.js?v=21.11-public8';
+import {mountSoundtrack} from './soundtrack.js?v=21.12-public9';
 mountSoundtrack(document);
 const panel=document.querySelector('#audio-panel');
 if(panel){
