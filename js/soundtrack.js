@@ -38,142 +38,10 @@ function boundedVolume(value, fallback = DEFAULT_VOLUME) {
 }
 
 /** A new bounded node graph for each play; the AudioContext is reused. */
-function createScore(context, output, view) {
+function createScore(context, output, view, onFailure) {
   const graph = [];
   const sources = new Set();
-  const node = value => { graph.push(value); return value; };
-  const mix = node(context.createGain());
-  mix.gain.value = 0.8;
-  const compressor = node(context.createDynamicsCompressor());
-  compressor.threshold.value = -18;
-  compressor.knee.value = 12;
-  compressor.ratio.value = 12;
-  compressor.attack.value = 0.004;
-  compressor.release.value = 0.18;
-  mix.connect(compressor); compressor.connect(output);
-  const echoSend = node(context.createGain());
-  echoSend.gain.value = 0.16;
-  const delay = node(context.createDelay(1));
-  delay.delayTime.value = 0.375;
-  const echoFilter = node(context.createBiquadFilter());
-  echoFilter.type = 'lowpass'; echoFilter.frequency.value = 2100;
-  const feedback = node(context.createGain());
-  feedback.gain.value = 0.23;
-  echoSend.connect(delay); delay.connect(echoFilter); echoFilter.connect(mix);
-  echoFilter.connect(feedback); feedback.connect(delay);
-
-  // Fixed seed, very short percussion bursts. There is no continuous noise bed.
-  const noise = context.createBuffer(1, Math.ceil(context.sampleRate * 0.18), context.sampleRate);
-  const data = noise.getChannelData(0);
-  let seed = 219;
-  for (let i = 0; i < data.length; i++) {
-    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
-    data[i] = ((seed / 4294967296) * 2 - 1) * 0.7;
-  }
-  let disposed = false, timer = null, step = 0, nextTime = context.currentTime + 0.04;
-
-  function track(source, nodes, start, end) {
-    const voice = {source, nodes}; sources.add(voice);
-    source.onended = () => {
-      sources.delete(voice);
-      for (const owned of [source, ...nodes]) { try { owned.disconnect(); } catch {} }
-    };
-    source.start(start); source.stop(end);
-  }
-  function tone(note, start, duration, level, type = 'triangle', cutoff = 2000, echo = false, attack = 0.008) {
-    const oscillator = context.createOscillator();
-    const envelope = context.createGain();
-    const filter = context.createBiquadFilter();
-    oscillator.type = type; oscillator.frequency.value = midi(note);
-    filter.type = 'lowpass'; filter.frequency.setValueAtTime(cutoff, start);
-    filter.Q.value = 0.5;
-    envelope.gain.setValueAtTime(0, start);
-    envelope.gain.linearRampToValueAtTime(level, start + attack);
-    envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-    oscillator.connect(filter); filter.connect(envelope); envelope.connect(mix);
-    if (echo) envelope.connect(echoSend);
-    track(oscillator, [filter,envelope], start, start + duration + 0.025);
-  }
-  function pad(note, start, level) {
-    const oscillator = context.createOscillator();
-    const filter = context.createBiquadFilter();
-    const envelope = context.createGain();
-    oscillator.type = 'sawtooth'; oscillator.frequency.value = midi(note);
-    filter.type = 'lowpass'; filter.frequency.value = 780; filter.Q.value = 0.35;
-    envelope.gain.setValueAtTime(0, start);
-    envelope.gain.linearRampToValueAtTime(level, start + 0.24);
-    envelope.gain.setValueAtTime(level * 0.8, start + 1.45);
-    envelope.gain.linearRampToValueAtTime(0, start + 2.2);
-    oscillator.connect(filter); filter.connect(envelope);
-    envelope.connect(mix); envelope.connect(echoSend);
-    track(oscillator, [filter,envelope], start, start + 2.22);
-  }
-  function kick(start, level) {
-    const oscillator = context.createOscillator();
-    const envelope = context.createGain();
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(112, start);
-    oscillator.frequency.exponentialRampToValueAtTime(47, start + 0.09);
-    envelope.gain.setValueAtTime(0, start);
-    envelope.gain.linearRampToValueAtTime(level, start + 0.004);
-    envelope.gain.exponentialRampToValueAtTime(0.0001, start + 0.27);
-    oscillator.connect(envelope); envelope.connect(mix);
-    track(oscillator, [envelope], start, start + 0.29);
-  }
-  function percussion(start, level, snare = false) {
-    const source = context.createBufferSource(); source.buffer = noise;
-    const filter = context.createBiquadFilter();
-    filter.type = snare ? 'bandpass' : 'highpass';
-    filter.frequency.value = snare ? 1700 : 6800; filter.Q.value = snare ? 0.8 : 0.4;
-    const envelope = context.createGain();
-    const duration = snare ? 0.13 : 0.045;
-    envelope.gain.setValueAtTime(0, start);
-    envelope.gain.linearRampToValueAtTime(level, start + 0.002);
-    envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-    source.connect(filter); filter.connect(envelope); envelope.connect(mix);
-    track(source, [filter,envelope], start, start + duration + 0.01);
-    if (snare) tone(50, start, 0.085, 0.045, 'sine', 1000);
-  }
-  function scheduleStep(index, time) {
-    const bar = Math.floor(index / 16) % 16;
-    const beat = index % 16;
-    const harmony = chords[Math.floor(bar / 2)];
-    // Bars 9–10 ease back before the second phrase builds to its resolution.
-    const breakdown = bar === 8 || bar === 9;
-    const intensity = breakdown ? 0.7 : bar >= 12 ? 1.08 : 1;
-    if (beat === 0) harmony.notes.forEach(note => pad(note, time, 0.018 * intensity));
-    if (beat % 4 === 0 && (!breakdown || beat % 8 === 0)) kick(time, beat === 0 ? 0.29 : 0.23);
-    if ((beat === 4 || beat === 12) && !breakdown) percussion(time, 0.075, true);
-    if (beat % 4 === 2) percussion(time, 0.038 * intensity);
-    if (bar >= 12 && (beat === 7 || beat === 15)) percussion(time, 0.019);
-    if ([0,3,6,8,11,14].includes(beat)) {
-      const offset = beat === 11 ? 12 : beat === 14 && bar % 2 ? 7 : 0;
-      tone(harmony.root + offset, time + 0.009, beat === 0 || beat === 8 ? 0.30 : 0.18,
-        0.105 * intensity, 'triangle', 480);
-    }
-    if (beat % 2 === 0 && (!breakdown || beat % 4 === 0)) {
-      const order = (beat / 2 + (bar % 2 ? 3 : 0)) % arpeggio.length;
-      tone(harmony.notes[arpeggio[order]] + 12, time + (beat % 4 === 2 ? 0.014 : 0),
-        0.27, (beat % 4 === 0 ? 0.047 : 0.032) * intensity, 'triangle', 2400, true);
-    }
-    const phraseIndex = [0,3,6,10,14].indexOf(beat);
-    if (bar % 8 >= 4 && phraseIndex >= 0) {
-      tone(motif[Math.floor(bar / 2)][phraseIndex], time + 0.017, phraseIndex === 4 ? 0.43 : 0.30,
-        0.032 * intensity, 'sawtooth', 1350, true, 0.025);
-    }
-  }
-  function tick() {
-    if (disposed) return;
-    // An overdue tab gets a new clock anchor, never a burst of missed notes.
-    if (nextTime < context.currentTime - 0.3) nextTime = context.currentTime + 0.04;
-    while (nextTime < context.currentTime + 0.16) {
-      scheduleStep(step, nextTime);
-      step = (step + 1) % 256;
-      nextTime += STEP_SECONDS;
-    }
-  }
-  try { tick(); timer = view.setInterval(tick, 25); }
-  catch (error) { stop(); throw error; }
+  let disposed = false, timer = null;
   function stop() {
     if (disposed) return;
     disposed = true;
@@ -186,7 +54,145 @@ function createScore(context, output, view) {
     sources.clear();
     for (const owned of graph) { try { owned.disconnect(); } catch {} }
   }
-  return {stop};
+  try {
+    const node = value => { graph.push(value); return value; };
+    const mix = node(context.createGain());
+    mix.gain.value = 0.8;
+    const compressor = node(context.createDynamicsCompressor());
+    compressor.threshold.value = -18;
+    compressor.knee.value = 12;
+    compressor.ratio.value = 12;
+    compressor.attack.value = 0.004;
+    compressor.release.value = 0.18;
+    mix.connect(compressor); compressor.connect(output);
+    const echoSend = node(context.createGain());
+    echoSend.gain.value = 0.16;
+    const delay = node(context.createDelay(1));
+    delay.delayTime.value = 0.375;
+    const echoFilter = node(context.createBiquadFilter());
+    echoFilter.type = 'lowpass'; echoFilter.frequency.value = 2100;
+    const feedback = node(context.createGain());
+    feedback.gain.value = 0.23;
+    echoSend.connect(delay); delay.connect(echoFilter); echoFilter.connect(mix);
+    echoFilter.connect(feedback); feedback.connect(delay);
+
+    // Fixed seed, very short percussion bursts. There is no continuous noise bed.
+    const noise = context.createBuffer(1, Math.ceil(context.sampleRate * 0.18), context.sampleRate);
+    const data = noise.getChannelData(0);
+    let seed = 219;
+    for (let i = 0; i < data.length; i++) {
+      seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+      data[i] = ((seed / 4294967296) * 2 - 1) * 0.7;
+    }
+    let step = 0, nextTime = context.currentTime + 0.04;
+
+    function track(source, nodes, start, end) {
+      const voice = {source, nodes}; sources.add(voice);
+      source.onended = () => {
+        sources.delete(voice);
+        for (const owned of [source, ...nodes]) { try { owned.disconnect(); } catch {} }
+      };
+      source.start(start); source.stop(end);
+    }
+    function tone(note, start, duration, level, type = 'triangle', cutoff = 2000, echo = false, attack = 0.008) {
+      const oscillator = context.createOscillator();
+      const envelope = context.createGain();
+      const filter = context.createBiquadFilter();
+      oscillator.type = type; oscillator.frequency.value = midi(note);
+      filter.type = 'lowpass'; filter.frequency.setValueAtTime(cutoff, start);
+      filter.Q.value = 0.5;
+      envelope.gain.setValueAtTime(0, start);
+      envelope.gain.linearRampToValueAtTime(level, start + attack);
+      envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+      oscillator.connect(filter); filter.connect(envelope); envelope.connect(mix);
+      if (echo) envelope.connect(echoSend);
+      track(oscillator, [filter,envelope], start, start + duration + 0.025);
+    }
+    function pad(note, start, level) {
+      const oscillator = context.createOscillator();
+      const filter = context.createBiquadFilter();
+      const envelope = context.createGain();
+      oscillator.type = 'sawtooth'; oscillator.frequency.value = midi(note);
+      filter.type = 'lowpass'; filter.frequency.value = 780; filter.Q.value = 0.35;
+      envelope.gain.setValueAtTime(0, start);
+      envelope.gain.linearRampToValueAtTime(level, start + 0.24);
+      envelope.gain.setValueAtTime(level * 0.8, start + 1.45);
+      envelope.gain.linearRampToValueAtTime(0, start + 2.2);
+      oscillator.connect(filter); filter.connect(envelope);
+      envelope.connect(mix); envelope.connect(echoSend);
+      track(oscillator, [filter,envelope], start, start + 2.22);
+    }
+    function kick(start, level) {
+      const oscillator = context.createOscillator();
+      const envelope = context.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(112, start);
+      oscillator.frequency.exponentialRampToValueAtTime(47, start + 0.09);
+      envelope.gain.setValueAtTime(0, start);
+      envelope.gain.linearRampToValueAtTime(level, start + 0.004);
+      envelope.gain.exponentialRampToValueAtTime(0.0001, start + 0.27);
+      oscillator.connect(envelope); envelope.connect(mix);
+      track(oscillator, [envelope], start, start + 0.29);
+    }
+    function percussion(start, level, snare = false) {
+      const source = context.createBufferSource(); source.buffer = noise;
+      const filter = context.createBiquadFilter();
+      filter.type = snare ? 'bandpass' : 'highpass';
+      filter.frequency.value = snare ? 1700 : 6800; filter.Q.value = snare ? 0.8 : 0.4;
+      const envelope = context.createGain();
+      const duration = snare ? 0.13 : 0.045;
+      envelope.gain.setValueAtTime(0, start);
+      envelope.gain.linearRampToValueAtTime(level, start + 0.002);
+      envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+      source.connect(filter); filter.connect(envelope); envelope.connect(mix);
+      track(source, [filter,envelope], start, start + duration + 0.01);
+      if (snare) tone(50, start, 0.085, 0.045, 'sine', 1000);
+    }
+    function scheduleStep(index, time) {
+      const bar = Math.floor(index / 16) % 16;
+      const beat = index % 16;
+      const harmony = chords[Math.floor(bar / 2)];
+      // Bars 9–10 ease back before the second phrase builds to its resolution.
+      const breakdown = bar === 8 || bar === 9;
+      const intensity = breakdown ? 0.7 : bar >= 12 ? 1.08 : 1;
+      if (beat === 0) harmony.notes.forEach(note => pad(note, time, 0.018 * intensity));
+      if (beat % 4 === 0 && (!breakdown || beat % 8 === 0)) kick(time, beat === 0 ? 0.29 : 0.23);
+      if ((beat === 4 || beat === 12) && !breakdown) percussion(time, 0.075, true);
+      if (beat % 4 === 2) percussion(time, 0.038 * intensity);
+      if (bar >= 12 && (beat === 7 || beat === 15)) percussion(time, 0.019);
+      if ([0,3,6,8,11,14].includes(beat)) {
+        const offset = beat === 11 ? 12 : beat === 14 && bar % 2 ? 7 : 0;
+        tone(harmony.root + offset, time + 0.009, beat === 0 || beat === 8 ? 0.30 : 0.18,
+          0.105 * intensity, 'triangle', 480);
+      }
+      if (beat % 2 === 0 && (!breakdown || beat % 4 === 0)) {
+        const order = (beat / 2 + (bar % 2 ? 3 : 0)) % arpeggio.length;
+        tone(harmony.notes[arpeggio[order]] + 12, time + (beat % 4 === 2 ? 0.014 : 0),
+          0.27, (beat % 4 === 0 ? 0.047 : 0.032) * intensity, 'triangle', 2400, true);
+      }
+      const phraseIndex = [0,3,6,10,14].indexOf(beat);
+      if (bar % 8 >= 4 && phraseIndex >= 0) {
+        tone(motif[Math.floor(bar / 2)][phraseIndex], time + 0.017, phraseIndex === 4 ? 0.43 : 0.30,
+          0.032 * intensity, 'sawtooth', 1350, true, 0.025);
+      }
+    }
+    function schedule() {
+      if (disposed) return;
+      // An overdue tab gets a new clock anchor, never a burst of missed notes.
+      if (nextTime < context.currentTime - 0.3) nextTime = context.currentTime + 0.04;
+      while (nextTime < context.currentTime + 0.16) {
+        scheduleStep(step, nextTime);
+        step = (step + 1) % 256;
+        nextTime += STEP_SECONDS;
+      }
+    }
+    function tick() {
+      try { schedule(); }
+      catch (error) { stop(); onFailure?.(error); }
+    }
+    schedule(); timer = view.setInterval(tick, 25);
+    return {stop};
+  } catch (error) { stop(); throw error; }
 }
 
 export function mountSoundtrack(root = document) {
@@ -199,6 +205,7 @@ export function mountSoundtrack(root = document) {
   const slider = root.querySelector('#audio-volume');
   const status = root.querySelector('#audio-status');
   const panel = root.querySelector('#audio-panel');
+  const volumeValue = root.querySelector('#audio-volume-value');
   let volume = DEFAULT_VOLUME;
   try {
     const stored = view.localStorage.getItem(VOLUME_KEY);
@@ -226,7 +233,8 @@ export function mountSoundtrack(root = document) {
     button.setAttribute('aria-busy', String(state === 'starting'));
     button.dataset.audioState = state;
     button.disabled = destroyed || !AudioContext || state === 'unavailable';
-    if (status) status.textContent = text || labels[state] || labels.paused;
+    if (status) status.textContent = text || (playing && volume === 0 ? '原创电子配乐 · 静音（音量 0%）' : labels[state] || labels.paused);
+    if (volumeValue) volumeValue.textContent = `${volume}%`;
     if (panel) panel.dataset.audioState = state;
   }
   function silence() {
@@ -238,7 +246,7 @@ export function mountSoundtrack(root = document) {
     }
     score?.stop(); score = null;
   }
-  function suspendWhenHidden() {
+  function suspendContext() {
     if (!context || context.state === 'closed' || pendingSuspend) return;
     try {
       const suspension = Promise.resolve(context.suspend());
@@ -251,7 +259,7 @@ export function mountSoundtrack(root = document) {
     generation++;
     silence();
     render(reason);
-    if (hidden() || reason === 'hidden') suspendWhenHidden();
+    suspendContext();
   }
   function onContextChange() {
     if (state === 'playing' && context.state !== 'running') pause('interrupted');
@@ -259,29 +267,51 @@ export function mountSoundtrack(root = document) {
     // silent: statechange never starts a score or restores playing intention.
   }
   function ensureContext() {
+    if (context?.state === 'closed') {
+      context.removeEventListener('statechange', onContextChange);
+      try { output?.disconnect(); } catch {}
+      context = null; output = null; pendingSuspend = null;
+    }
     if (context) return;
-    context = new AudioContext({latencyHint:'playback'});
-    output = context.createGain(); output.gain.value = 0;
-    output.connect(context.destination);
-    context.addEventListener('statechange', onContextChange);
+    const candidate = new AudioContext({latencyHint:'playback'});
+    let master;
+    try {
+      master = candidate.createGain(); master.gain.value = 0;
+      master.connect(candidate.destination);
+      candidate.addEventListener('statechange', onContextChange);
+    } catch (error) {
+      try { master?.disconnect(); } catch {}
+      try { Promise.resolve(candidate.close()).catch(() => {}); } catch {}
+      throw error;
+    }
+    context = candidate; output = master;
   }
   async function activate(token, resume, suspension) {
     try {
       await resume;
       if (suspension) await suspension.catch(() => {});
-      if (destroyed || token !== generation || hidden()) return;
+      if (destroyed || token !== generation || hidden()) {
+        if (!destroyed && state !== 'starting' && state !== 'playing') suspendContext();
+        return;
+      }
       // A preceding background suspension can finish after the click's resume.
       if (context.state !== 'running') await context.resume();
-      if (destroyed || token !== generation || hidden()) return;
+      if (destroyed || token !== generation || hidden()) {
+        if (!destroyed && state !== 'starting' && state !== 'playing') suspendContext();
+        return;
+      }
       if (context.state !== 'running') throw new Error('Audio context is not running');
-      score = createScore(context, output, view);
+      score = createScore(context, output, view, () => {
+        if (destroyed || token !== generation) return;
+        silence(); suspendContext(); render('blocked');
+      });
       output.gain.cancelScheduledValues(context.currentTime);
       output.gain.setValueAtTime(0, context.currentTime);
       output.gain.linearRampToValueAtTime(targetGain(), context.currentTime + 0.09);
       render('playing');
     } catch {
       if (destroyed || token !== generation) return;
-      silence(); render('blocked');
+      silence(); suspendContext(); render('blocked');
     }
   }
   function onToggle(event) {
@@ -297,13 +327,14 @@ export function mountSoundtrack(root = document) {
       // The first resume happens synchronously within the user gesture.
       const resume = context.resume();
       void activate(token, resume, suspension);
-    } catch { if (token === generation) { silence(); render('blocked'); } }
+    } catch { if (token === generation) { silence(); suspendContext(); render('blocked'); } }
   }
   function onVolume() {
     volume = boundedVolume(slider.value, volume);
     slider.value = String(volume);
     slider.setAttribute('aria-valuetext', `${volume}%`);
     try { view.localStorage.setItem(VOLUME_KEY, String(volume)); } catch {}
+    render(state);
     if (state === 'playing' && output && context) {
       output.gain.cancelScheduledValues(context.currentTime);
       output.gain.setTargetAtTime(targetGain(), context.currentTime, 0.035);

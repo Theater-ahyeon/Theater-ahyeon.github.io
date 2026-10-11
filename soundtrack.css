@@ -2,3 +2,7 @@
 @media(max-width:1000px) and (min-width:681px){.breadcrumb>span:nth-child(2){display:none}}
 @media(max-width:680px){.global-controls{gap:7px}.soundtrack-controls>summary{font-size:10px;gap:2px}.soundtrack-controls>summary b{font-size:14px}.soundtrack-popover{right:0;width:min(260px,calc(100vw - 28px));padding:20px}.global-controls .icon-button{font-size:10px}.motion-system{max-width:38px}}
 @media(max-width:680px){.soundtrack-popover{position:fixed;top:61px;left:12px;right:12px;width:auto;max-width:none}}
+/* Keep every control reachable in landscape and zoomed, short viewports. */
+.soundtrack-popover{max-height:calc(100svh - 100px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+@media(max-width:680px){.soundtrack-popover{max-height:calc(100svh - 73px)}}
+.soundtrack-popover output{font-family:var(--mono);font-variant-numeric:tabular-nums}

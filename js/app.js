@@ -1,13 +1,13 @@
-import {homeTransfer,dockHomeTransfer,refreshHomeTransfer,clearHomeTransfer} from './home-transfer.js?v=21.9-public6';
-import {planDossierReturn,containedImageRect} from './dossier-return.js?v=21.9-public6';
-import {observationTransfer,dockObservationTransfer,refreshObservationTransfer,clearObservationTransfer} from './observation-transfer.js?v=21.9-public6';
-import {mountNavigationCinema} from './navigation-cinema.js?v=21.9-public6';
-import {openingLayers} from './opening-layers.js?v=21.9-public6';
-import {monitorImage} from './media.js?v=21.9-public6';
-import {profile, chapters, projects, studies} from './data.js?v=21.9-public6';
-import {home,works,studiesView,about,projectDetail,studyPanel,studySource} from './components.js?v=21.9-public6';
-import {AmbientField} from './motion.js?v=21.9-public6';
-import {Choreography} from './choreography.js?v=21.9-public6';
+import {homeTransfer,dockHomeTransfer,refreshHomeTransfer,clearHomeTransfer} from './home-transfer.js?v=21.10-public7';
+import {planDossierReturn,containedImageRect} from './dossier-return.js?v=21.10-public7';
+import {observationTransfer,dockObservationTransfer,refreshObservationTransfer,clearObservationTransfer} from './observation-transfer.js?v=21.10-public7';
+import {mountNavigationCinema} from './navigation-cinema.js?v=21.10-public7';
+import {openingLayers} from './opening-layers.js?v=21.10-public7';
+import {monitorImage} from './media.js?v=21.10-public7';
+import {profile, chapters, projects, studies} from './data.js?v=21.10-public7';
+import {home,works,studiesView,about,projectDetail,studyPanel,studySource} from './components.js?v=21.10-public7';
+import {AmbientField} from './motion.js?v=21.10-public7';
+import {Choreography} from './choreography.js?v=21.10-public7';
 const main=document.querySelector('#main'),intro=document.querySelector('#intro'),dialog=document.querySelector('#detail-dialog'),shell=document.querySelector('.app-shell');
 intro.insertAdjacentHTML?.('afterbegin',openingLayers(profile.name,projects));
 document.querySelector('.transition-veil').insertAdjacentHTML?.('afterbegin',observationTransfer()+homeTransfer());
@@ -150,7 +150,7 @@ function playIntro(){
 }
 function openProject(project,trigger){
   clearTimeout(dialogCloseTimer);dialogVersion++;dialog.classList.remove('dialog-closing','dialog-returning');lastFocus=trigger;restoreDialogFocus=true;
-  releaseDetailImages();for(const animation of dialog.getAnimations({subtree:true}))animation.cancel();document.querySelector('#dialog-content').innerHTML=projectDetail(project);if(!dialog.open)dialog.showModal();
+  releaseDetailImages();for(const animation of dialog.getAnimations({subtree:true}))animation.cancel();document.querySelector('#dialog-content').innerHTML=projectDetail(project);if(!dialog.open)dialog.showModal();dialog.scrollTop=0;dialog.scrollLeft=0;
   choreography.detail(dialog,trigger);releaseDetailImages=bindImages(dialog);document.querySelector('.dialog-close').focus({preventScroll:true});
 }
 function closeDialog(immediate=false,restore=true){
