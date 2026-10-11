@@ -9,10 +9,11 @@ export function openingLayers(name='theater',projectList=[]) {
   const escapeText=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const brand=escapeText(name);
   const imageProject=projectList.find(p=>p.image||p.artImage);
+  const repoProject=projectList.find(p=>p.showcase);
   const dialogueProjects=projectList.filter(p=>p.artKind==='dialogue').slice(0,2);
   const windows = [
-    [imageProject?'showreel':'arch', '01', imageProject?.title||'SPATIAL RECORD', imageProject?.category||'ENVIRONMENT STUDY'],
-    [dialogueProjects.length?'dialogue':'geometry', '02', dialogueProjects.map(p=>p.title).join(' / ')||'INTERACTION', dialogueProjects.length?'INTERACTION STUDIES':'GEOMETRY STUDY'],
+    [repoProject?'repository':imageProject?'showreel':'arch', '01', repoProject?.title||imageProject?.title||'SPATIAL RECORD',repoProject?'GITHUB / README':imageProject?.category||'ENVIRONMENT STUDY'],
+    [dialogueProjects.length?'dialogue':'geometry', '02', dialogueProjects.map(p=>p.title).join(' / ')||'INTERACTION', dialogueProjects.some(p=>p.showcase)?'README / PROJECTS':dialogueProjects.length?'INTERACTION STUDIES':'GEOMETRY STUDY'],
     ['sea', '03', 'PUBLIC WORKS', 'CODE + INTERACTION'],
     ['observatory', '04', 'ORBIT', 'ENVIRONMENT STUDY'],
     ['letterform', '05', 'LETTERFORM', 'TYPE STUDY'],
@@ -42,7 +43,7 @@ export function openingLayers(name='theater',projectList=[]) {
       <div class="opening-dossier-heading"><span>INDEXED FRAGMENTS</span><span>01 — 08 / VISUAL STUDIES</span></div>
       <div class="opening-dossier-grid">${windows.map(([crop,index,label,caption],i)=>`
         <div class="opening-window opening-window-${crop}" style="--opening-i:${i}">
-          <div class="opening-window-image">${crop==='showreel'&&imageProject?`<img src="${escapeText(imageProject.image||imageProject.artImage)}" alt="">`:crop==='letterform'?`<b class="opening-window-type">${brand}</b>`:crop==='dialogue'?'<b class="opening-mini-dialogue"><i></i><i></i><i></i><em>↳</em></b>':''}</div><i class="opening-window-invert"></i>
+          <div class="opening-window-image">${crop==='repository'?`<div class="opening-repository-text"><small>README.md</small><b>${escapeText(repoProject.title)}</b>${repoProject.showcase.lines.map(l=>`<span>${escapeText(l)}</span>`).join('')}</div>`:crop==='showreel'&&imageProject?`<img src="${escapeText(imageProject.image||imageProject.artImage)}" alt="">`:crop==='letterform'?`<b class="opening-window-type">${brand}</b>`:crop==='dialogue'?(dialogueProjects.some(p=>p.showcase)?`<div class="opening-repository-text"><small>README / PROJECTS</small>${dialogueProjects.map(p=>`<b>${escapeText(p.title)}</b><span>${escapeText(p.showcase?.lines?.[0]||p.subtitle)}</span>`).join('')}</div>`:'<b class="opening-mini-dialogue"><i></i><i></i><i></i><em>↳</em></b>'):''}</div><i class="opening-window-invert"></i>
           <span class="opening-window-index">${index}<i>+</i></span>
           <span class="opening-window-caption">${escapeText(label)}<small>${escapeText(caption)}</small></span>
         </div>`).join('')}

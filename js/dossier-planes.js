@@ -34,6 +34,7 @@ function imageURL(value) {
 }
 
 function shapeFor(project) {
+  if(project.showcase)return 'repository';
   if ((project.artKind || project.id) === 'dialogue') return 'dialogue';
   if ((project.artKind || project.id) === 'archive') return 'archive';
   return imageURL(project.image) ? 'showreel' : 'graphic';
@@ -41,7 +42,8 @@ function shapeFor(project) {
 
 const uiPlane = `<span class="dossier-ui-plane"><span class="dossier-ui-top"><i></i><i></i><i></i></span><span class="dossier-ui-side"><i></i><i></i><i></i></span><span class="dossier-ui-context"><i></i><i></i><i></i><b>↳</b></span><span class="dossier-ui-answer"><i></i><i></i></span></span>`;
 
-function media(kind) {
+function media(kind,project) {
+  if(kind==='repository')return `<span class="dossier-plane-media"><span class="dossier-repository-fragment"><small>README.md</small><b>${escapeText(project.title)}</b>${project.showcase.lines.map(line=>`<span>${escapeText(line)}</span>`).join('')}</span></span>`;
   return `<span class="dossier-plane-media">${kind === 'dialogue' || kind === 'graphic' ? uiPlane : ''}</span>`;
 }
 
@@ -53,16 +55,16 @@ function planes(input, surface) {
   const category = escapeText(project.category || 'PERSONAL EXPERIMENT');
   const source = imageURL(project.image) || (kind === 'archive' ? imageURL(project.artImage) || './assets/observatory.webp' : '');
   const imageStyle = source ? ` style="--dossier-image:url(&quot;${escapeText(source)}&quot;)"` : '';
-  const classification = kind === 'dialogue' ? 'CONTEXT / INTERFACE' : kind === 'archive' ? 'SPACE / COMPOSITION' : kind === 'showreel' ? 'PROJECT / DIAGRAM' : 'FORM / EXPERIMENT';
+  const classification = kind === 'repository' ? 'GITHUB / README' : kind === 'dialogue' ? 'CONTEXT / INTERFACE' : kind === 'archive' ? 'SPACE / COMPOSITION' : kind === 'showreel' ? 'PROJECT / DIAGRAM' : 'FORM / EXPERIMENT';
   return `<span class="dossier-planes dossier-${surface} dossier-${kind}" aria-hidden="true"${imageStyle}>
     <span class="dossier-performance">
       <span class="dossier-field"></span>
       <span class="dossier-floor"><i></i></span>
       <span class="dossier-horizon"><i></i><i></i><i></i></span>
       <span class="dossier-catalogue-index"><b>${no}</b><span>SELECTED<br>EXPERIMENT</span></span>
-      <span class="dossier-principal">${media(kind)}<i class="dossier-plane-rule"></i></span>
-      <span class="dossier-crop dossier-crop-a">${media(kind)}<span>${no} / A</span></span>
-      <span class="dossier-crop dossier-crop-b">${media(kind)}<span>${no} / B</span></span>
+      <span class="dossier-principal">${media(kind,project)}<i class="dossier-plane-rule"></i></span>
+      <span class="dossier-crop dossier-crop-a">${media(kind,project)}<span>${no} / A</span></span>
+      <span class="dossier-crop dossier-crop-b">${media(kind,project)}<span>${no} / B</span></span>
       <span class="dossier-side-cut dossier-side-cut-a"></span>
       <span class="dossier-side-cut dossier-side-cut-b"></span>
       <span class="dossier-stage-meta"><span>${category}</span><i></i><b>${no}</b></span>
